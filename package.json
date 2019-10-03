@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack && nodemon index",
-    "mini": " cd public/js && browserify jquery.min.js client.js -o bundle.js"
+    "start": "webpack ",
+    "mini": " cd public/js && browserify jquery.min.js client.js -o bundle.js",
+    "dev": "nodemon ./index"
   },
   "dependencies": {
     "@atlaskit/editor-core": "^113.1.0",

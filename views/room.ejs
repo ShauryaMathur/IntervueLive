@@ -23,36 +23,12 @@
     const room = "<%=room_name%>";
   </script>
   <script src="../js/bundle.js" type="text/javascript"></script>
+ 
   
 <!--   <script src="../js/jquery.min.js" type="text/javascript"></script>
   <script src="../js/client.js" type="text/javascript"></script>-->
   <!-- <script src="../js/bootstrap.min.js" type="text/javascript"></script>  -->
-  <style>
-      #monaco-editor {
-          width:100%;
-          height:600px;
-          border:1px solid #ccc;
-      }
-      .yRemoteSelection {
-          background-color: rgb(250, 129, 0, .5)
-      }
-      .yRemoteSelectionHead {
-          position: absolute;
-          border-left: orange solid 2px;
-          border-top: orange solid 2px;
-          border-bottom: orange solid 2px;
-          height: 100%;
-          box-sizing: border-box;
-      }
-      .yRemoteSelectionHead::after {
-          position: absolute;
-          content: ' ';
-          border: 3px solid orange;
-          border-radius: 4px;
-          left: -4px;
-          top: -5px;
-      }
-  </style>
+ 
 </head>
 
 <body>
@@ -79,9 +55,9 @@
                   <button id="hangup" type="button" class="btn btn-outline-danger">
                     <i class="fas fa-phone-slash"></i>
                   </button>
+                  <button id="btn1" onclick="gdm()">Share your Screen !</button>
+                  <div id="errorMsg"></div>
                 </div>
-            
-               
             
                 <!-- Modal -->
                 <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -90,7 +66,7 @@
                       <div class="modal-body">
                         <div class="modal-header">
                           <h6 class="modal-title">
-                            Share this session URL below to invite friends.
+                            Share this session URL below to invite the candidate.
                           </h6>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -135,6 +111,7 @@
                 <div id="main" class="header-content container">
                   <h1 id="waiting">Waiting for someone to join...</h1>
                   <video id="host_stream" playsinline autoplay muted></video>
+                  <!-- <video id="gum-local" autoplay="" playsinline="" src="video.srcObject"></video> -->
                 </div>
               </div>
             </div>
@@ -145,7 +122,10 @@
   
 
   <!--Scripts-->
+  <script src="../js/gdm_common.js" type="text/javascript"></script>
+  <script src="../js/gdm_main.js" type="text/javascript"></script>
   <script src="/css/blk-design-system.css" type="stylesheet"></script>
+ 
   <script src="/css/style.css" type="stylesheet"></script>
   <script src="/dist/monaco.bundle.js" type="text/javascript"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -157,13 +137,14 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
-  <script>
+    <!-- <link rel="stylesheet" href="/css/gdm_main.css"> -->
+  <!-- <script>
     $(document).ready(function () {
       let toastLink = document.getElementById("toast-link");
       toastLink.value = window.location.href;
       $(".toast").toast("show");
     });
-  </script>
+  </script> -->
   <script src="https://kit.fontawesome.com/9eae4b25ce.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
 </body>

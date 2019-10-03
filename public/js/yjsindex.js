@@ -25,9 +25,10 @@ getWorkerUrl: function (moduleId, label) {
 
 window.addEventListener('load', () => {
 const ydoc = new Y.Doc()
-console.log(window.location,' ',location);
-console.log('ydoc',ydoc,'S');
+//console.log(window.location,' ',location);
+//console.log('ydoc',ydoc,'S');
 const provider = new WebsocketProvider(`${location.protocol === 'http:' ? 'ws:' : 'wss:'}${location.host}`, location.href.split('/')[4].toString(),ydoc )
+console.log(provider);
 const type = ydoc.getText('monaco')
 
 const editor = monaco.editor.create(document.getElementById('monaco-editor'), {
@@ -36,17 +37,6 @@ const editor = monaco.editor.create(document.getElementById('monaco-editor'), {
   theme: 'vs-dark'
 })
 const monacoBinding = new MonacoBinding(type, editor.getModel(), new Set([editor]), provider.awareness)
-
-/* const connectBtn = document.getElementById('y-connect-btn')
-connectBtn.addEventListener('click', () => {
-  if (provider.shouldConnect) {
-    provider.disconnect()
-    connectBtn.textContent = 'Connect'
-  } else {
-    provider.connect()
-    connectBtn.textContent = 'Disconnect'
-  }
-}) */
 
 window.example = { provider, ydoc, type, monacoBinding }
 })
