@@ -25,8 +25,7 @@ self.MonacoEnvironment = {
 
 window.addEventListener("load", () => {
   const ydoc = new Y.Doc();
-  //console.log(window.location,' ',location);
-  //console.log('ydoc',ydoc,'S');
+
   const provider = new WebsocketProvider(
     `${location.protocol === "http:" ? "ws:" : "wss:"}${location.host}`,
     location.href.split("/")[4].toString(),
@@ -35,7 +34,7 @@ window.addEventListener("load", () => {
   console.log(provider);
   const type = ydoc.getText("monaco");
 
-  const editor = monaco.editor.create(
+  window.editor = monaco.editor.create(
     document.getElementById("monaco-editor"),
     {
       value: "",
