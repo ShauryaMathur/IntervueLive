@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", event => {
-  const Y=require('yjs');
-  const {WebsocketProvider}=require('y-websocket');
-  const { MonacoBinding } =require('y-monaco');
-  const  monaco=require('monaco-editor');
+  
   let localStream,client = {};
   let url = 'http://localhost/5000';
   const Peer = require("simple-peer");
