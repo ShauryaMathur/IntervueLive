@@ -30,11 +30,11 @@ app.get("/", (req, res) => {
   res.render("index", { rooms: rooms });
 });
 
-const server2 = http.createServer((request, response) => {
+/* const server2 = http.createServer((request, response) => {
   request.addListener('end', () => {
     staticServer.serve(request, response)
   }).resume()
-})
+}) */
 
 //@route -> room
 app.get("/r/:room", (req, res) => {
@@ -99,9 +99,9 @@ app.use(function(req, res, next) {
 const wss = new WebSocket.Server({ server })
 
 wss.on('connection', (conn, req) => setupWSConnection(conn, req, { gc: req.url.slice(1) !== 'prosemirror-versions' }))
-server2.listen(port, () => {
+/* server2.listen(port, () => {
   console.log(`Server for wbsocket started on PORT --> ${PORT}`);
-});
+}); */
 server.listen(PORT, () => {
   console.log(`Server started on PORT --> ${PORT}`);
 });
