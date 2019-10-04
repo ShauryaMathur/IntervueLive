@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", event => {
         peer.on("signal", data => {
           if (!client.gotAnswer) {
             socket.emit("offer", room, data);
-            console.log("/n/n/n/n/n/nBan Gaya");
           }
         });
         client.peer = peer;

@@ -119,6 +119,19 @@
               </div>
             </div>
         <div style="width: 50%;float:right">
+          <select onchange="changeLanguage()" id="language">
+            <option value="javascript">Javascript</option>
+            <option value="python">Python</option>
+            <option value="mysql">mysql</option>
+            <option value="php">PHP</option>
+            <option value="r">R</option>
+            <option value="cpp">CPP</option>
+            <option value="csharp">C#</option>
+          </select>
+          <select onchange="changeTheme()" id="theme">
+            <option value="vs-dark">Dark</option>
+            <option value="vs">Light</option>
+          </select>
           <div id="monaco-editor" />
         </div>
     </div>
@@ -130,7 +143,17 @@
   <script src="/css/blk-design-system.css" type="stylesheet"></script>
  
   <script src="/css/style.css" type="stylesheet"></script>
-  
+  <script src="/dist/monaco.bundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    function changeLanguage(){
+        var language = document.getElementById('language').value;
+        monaco.editor.setModelLanguage(window.editor.getModel(), language);
+      }
+      function changeTheme(){
+        var theme = document.getElementById('theme').value;
+        monaco.editor.setTheme(theme);
+      }
+  </script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
