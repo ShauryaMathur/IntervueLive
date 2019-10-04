@@ -15496,7 +15496,7 @@ module.exports = yeast;
 document.addEventListener("DOMContentLoaded", event => {
   
   let localStream,client = {};
-  let url = 'http://localhost:5000';
+  let url = 'https://cgvideochat.herokuapp.com';
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
@@ -15597,6 +15597,7 @@ document.addEventListener("DOMContentLoaded", event => {
         peer.on("signal", data => {
           if (!client.gotAnswer) {
             socket.emit("offer", room, data);
+            console.log('/n/n/n/n/n/nBan Gaya');
           }
         });
         client.peer = peer;

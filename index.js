@@ -2,6 +2,15 @@ const express=require('express');
 const cors = require('cors');
 const app=express();
 const server = require("http").Server(app);
+const WebSocket = require('ws')
+const http = require('http')
+
+const StaticServer = require('node-static').Server
+const setupWSConnection = require('y-websocket/bin/utils.js').setupWSConnection
+
+const production = process.env.PRODUCTION != null
+const port = process.env.PORT || 8080
+
 const io = require("socket.io")(server);
 const PORT = process.env.PORT || 5000;
 
@@ -12,6 +21,7 @@ app.set("views", "./views");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+const staticServer = new StaticServer('.', { cache: production ? 3600 : false, gzip: production })
 
 const rooms = {};
 
@@ -19,6 +29,12 @@ const rooms = {};
 app.get("/", (req, res) => {
   res.render("index", { rooms: rooms });
 });
+
+const server2 = http.createServer((request, response) => {
+  request.addListener('end', () => {
+    staticServer.serve(request, response)
+  }).resume()
+})
 
 //@route -> room
 app.get("/r/:room", (req, res) => {
@@ -80,7 +96,12 @@ app.use(function(req, res, next) {
   res.status(404);
   res.send("404");
 });
+const wss = new WebSocket.Server({ server })
 
+wss.on('connection', (conn, req) => setupWSConnection(conn, req, { gc: req.url.slice(1) !== 'prosemirror-versions' }))
+server2.listen(port, () => {
+  console.log(`Server for wbsocket started on PORT --> ${PORT}`);
+});
 server.listen(PORT, () => {
   console.log(`Server started on PORT --> ${PORT}`);
 });
