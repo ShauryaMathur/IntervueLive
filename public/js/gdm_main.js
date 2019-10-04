@@ -9,7 +9,7 @@
 'use strict';
 
 var errorElement = document.querySelector('#errorMsg');
-var video = document.querySelector('video');
+var video = document.getElementById('screenshare');
 
 // Put variables in global scope to make them available to the browser console.
 var constraints = window.constraints = {
@@ -24,8 +24,9 @@ function handleSuccess(stream) {
   stream.oninactive = function() {
     console.log('Stream inactive');
   };
-  window.stream = stream; // make variable available to browser console
+  window.stream2 = stream; // make variable available to browser console
   video.srcObject = stream;
+  console.log('screen',window.stream2);
 }
 
 function handleError(error) {

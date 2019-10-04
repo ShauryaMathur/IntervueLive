@@ -1,8 +1,11 @@
 const express=require('express');
+const cors = require('cors');
 const app=express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const PORT = process.env.PORT || 5000;
+
+app.use(cors());
 
 //middleware
 app.set("views", "./views");

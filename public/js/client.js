@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", event => {
   
   let localStream,client = {};
-  let url = 'http://localhost/5000';
+  let url = 'http://localhost:5000';
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", event => {
       //emit new client
       socket.emit("new_client", room);
       localStream = stream;
+      console.log('screen2 in client',window.stream2);
       host_stream.setAttribute("autoplay", "");
       host_stream.setAttribute("muted", "");
       host_stream.setAttribute("playsinline", "");
