@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", event => {
   
   let localStream,client = {};
-  let url = 'https://cginterviewtool.herokuapp';
+  let url = 'https://tensorchat.herokuapp.com';
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
