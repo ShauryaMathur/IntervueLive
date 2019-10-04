@@ -15496,6 +15496,8 @@ module.exports = yeast;
 document.addEventListener("DOMContentLoaded", event => {
   
   let localStream,client = {};
+  let audioenabled=true;
+  let disbalevideoenabled=true;
   let url = 'https://cgvideochat.herokuapp.com';
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
@@ -15510,6 +15512,8 @@ document.addEventListener("DOMContentLoaded", event => {
   const link = document.getElementById("link");
   const invBtn = document.getElementById("invite");
   const waiting = document.getElementById("waiting");
+  const muteicon=document.getElementById("muteicon");
+  const disableVideoicon=document.getElementById("disableVideoicon");
 
   self.MonacoEnvironment = {
     getWorkerUrl: function (moduleId, label) {
@@ -15647,6 +15651,12 @@ document.addEventListener("DOMContentLoaded", event => {
         let audioTracks = localStream.getAudioTracks();
         for (var i = 0; i < audioTracks.length; ++i) {
           audioTracks[i].enabled = !audioTracks[i].enabled;
+          if(audioenabled)
+            muteicon.className='fas fa-microphone';
+          else
+            muteicon.className='fas fa-microphone-slash';
+            
+          audioenabled=!audioenabled;
         }
       });
 
@@ -15655,6 +15665,12 @@ document.addEventListener("DOMContentLoaded", event => {
         videoTracks = localStream.getVideoTracks();
         for (var i = 0; i < videoTracks.length; ++i) {
           videoTracks[i].enabled = !videoTracks[i].enabled;
+          if(disbalevideoenabled)
+            disableVideoicon.className='fas fa-video';
+          else
+            disableVideoicon.className='fas fa-video-slash';
+
+            disbalevideoenabled=!disbalevideoenabled;
         }
       });
 

@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", event => {
-  
-  let localStream,client = {};
-  let url = 'https://cgvideochat.herokuapp.com';
+  let localStream,
+    client = {};
+  let audioenabled = true;
+  let disbalevideoenabled = true;
+  let url = "https://cgvideochat.herokuapp.com";
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
@@ -15,25 +17,26 @@ document.addEventListener("DOMContentLoaded", event => {
   const link = document.getElementById("link");
   const invBtn = document.getElementById("invite");
   const waiting = document.getElementById("waiting");
+  const muteicon = document.getElementById("muteicon");
+  const disableVideoicon = document.getElementById("disableVideoicon");
 
   self.MonacoEnvironment = {
-    getWorkerUrl: function (moduleId, label) {
-      if (label === 'json') {
-        return '/dist/json.worker.bundle.js'
+    getWorkerUrl: function(moduleId, label) {
+      if (label === "json") {
+        return "/dist/json.worker.bundle.js";
       }
-      if (label === 'css') {
-        return '/dist/css.worker.bundle.js'
+      if (label === "css") {
+        return "/dist/css.worker.bundle.js";
       }
-      if (label === 'html') {
-        return '/dist/html.worker.bundle.js'
+      if (label === "html") {
+        return "/dist/html.worker.bundle.js";
       }
-      if (label === 'typescript' || label === 'javascript') {
-        return '/dist/ts.worker.bundle.js'
+      if (label === "typescript" || label === "javascript") {
+        return "/dist/ts.worker.bundle.js";
       }
-      return '/dist/editor.worker.bundle.js'
+      return "/dist/editor.worker.bundle.js";
     }
-  }
-  
+  };
 
   //initialize app with getUserMedia
   navigator.getMedia =
@@ -42,24 +45,23 @@ document.addEventListener("DOMContentLoaded", event => {
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia;
 
-    if (DetectRTC.isWebRTCSupported === false) {
-      alert("Device not supported!");
-    }
-    if (DetectRTC.osName === "iOS" && DetectRTC.browser === "Chrome") {
-      alert("Browser not supported! Please use Safari");
-    }
-      
+  if (DetectRTC.isWebRTCSupported === false) {
+    alert("Device not supported!");
+  }
+  if (DetectRTC.osName === "iOS" && DetectRTC.browser === "Chrome") {
+    alert("Browser not supported! Please use Safari");
+  }
+
   navigator.mediaDevices
     .getUserMedia({
       video: true,
       audio: true
     })
     .then(stream => {
-     
       //emit new client
       socket.emit("new_client", room);
       localStream = stream;
-      console.log('screen2 in client',window.stream2);
+      console.log("screen2 in client", window.stream2);
       host_stream.setAttribute("autoplay", "");
       host_stream.setAttribute("muted", "");
       host_stream.setAttribute("playsinline", "");
@@ -102,7 +104,7 @@ document.addEventListener("DOMContentLoaded", event => {
         peer.on("signal", data => {
           if (!client.gotAnswer) {
             socket.emit("offer", room, data);
-            console.log('/n/n/n/n/n/nBan Gaya');
+            console.log("/n/n/n/n/n/nBan Gaya");
           }
         });
         client.peer = peer;
@@ -137,12 +139,11 @@ document.addEventListener("DOMContentLoaded", event => {
         if (client.peer) {
           client.peer.destroy();
         }
-       
       };
 
       //hangup
       hangup.addEventListener("click", () => {
-        socket.emit("user_disconnected", room)
+        socket.emit("user_disconnected", room);
         //console.log(`ROOOM:::${room}`)
         remove_peer();
       });
@@ -152,6 +153,10 @@ document.addEventListener("DOMContentLoaded", event => {
         let audioTracks = localStream.getAudioTracks();
         for (var i = 0; i < audioTracks.length; ++i) {
           audioTracks[i].enabled = !audioTracks[i].enabled;
+          if (audioenabled) muteicon.className = "fas fa-microphone";
+          else muteicon.className = "fas fa-microphone-slash";
+
+          audioenabled = !audioenabled;
         }
       });
 
@@ -160,6 +165,10 @@ document.addEventListener("DOMContentLoaded", event => {
         videoTracks = localStream.getVideoTracks();
         for (var i = 0; i < videoTracks.length; ++i) {
           videoTracks[i].enabled = !videoTracks[i].enabled;
+          if (disbalevideoenabled) disableVideoicon.className = "fas fa-video";
+          else disableVideoicon.className = "fas fa-video-slash";
+
+          disbalevideoenabled = !disbalevideoenabled;
         }
       });
 
@@ -176,7 +185,7 @@ document.addEventListener("DOMContentLoaded", event => {
       socket.on("sent_answer", signal_answer);
       socket.on("session_active", session_active);
       socket.on("create_peer", make_peer);
-      socket.on("remove_peer", remove_peer)
+      socket.on("remove_peer", remove_peer);
     })
     .catch(err => {
       alert(

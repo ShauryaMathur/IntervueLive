@@ -15,6 +15,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>CG Interview Tool</title>
+  <script src="/dist/monaco.bundle.js" type="text/javascript"></script>
+  <script src="../js/bundle.js" type="text/javascript"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
   <link rel="stylesheet" href="../css/style.css" />
@@ -22,9 +24,7 @@
   <script>
     const room = "<%=room_name%>";
   </script>
-  <script src="../js/bundle.js" type="text/javascript"></script>
- 
-  
+   
 <!--   <script src="../js/jquery.min.js" type="text/javascript"></script>
   <script src="../js/client.js" type="text/javascript"></script>-->
   <!-- <script src="../js/bootstrap.min.js" type="text/javascript"></script>  -->
@@ -47,16 +47,19 @@
                         <i class="far fa-envelope"></i>
                       </button>
                   <button id="disablevideo" type="button" class="btn btn-outline-primary">
-                    <i class="fas fa-video-slash"></i>
+                    <i class="fas fa-video-slash" id="disableVideoicon"></i>
                   </button>
                   <button id="mute" type="button" class="btn btn-outline-primary">
-                    <i class="fas fa-microphone-slash"></i>
+                    <i class="fas fa-microphone-slash" id="muteicon"></i>
                   </button>
+                  <button id="btn1" onclick="gdm()" type="button" class="btn btn-outline-primary" >
+                    <i class="fas fa-desktop"></i>
+                  </button>
+                  <!-- <div id="errorMsg"></div> -->
                   <button id="hangup" type="button" class="btn btn-outline-danger">
-                    <i class="fas fa-phone-slash"></i>
+                    <i class="fas fa-phone-slash" ></i>
                   </button>
-                  <button id="btn1" onclick="gdm()">Share your Screen !</button>
-                  <div id="errorMsg"></div>
+                  
                 </div>
             
                 <!-- Modal -->
@@ -122,12 +125,12 @@
   
 
   <!--Scripts-->
-  <script src="../js/gdm_common.js" type="text/javascript"></script>
-  <script src="../js/gdm_main.js" type="text/javascript"></script>
+  <!-- <script src="../js/gdm_common.js" type="text/javascript"></script>
+  <script src="../js/gdm_main.js" type="text/javascript"></script> -->
   <script src="/css/blk-design-system.css" type="stylesheet"></script>
  
   <script src="/css/style.css" type="stylesheet"></script>
-  <script src="/dist/monaco.bundle.js" type="text/javascript"></script>
+  
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
