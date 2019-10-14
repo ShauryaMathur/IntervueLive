@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", event => {
   const host_stream = document.getElementById("host_stream");
   const remote_stream = document.getElementById("remote_stream");
   const disableVideo = document.getElementById("disablevideo");
-  const screensharebutton=document.getElementById("screensharebuttonid");
   const mute = document.getElementById("mute");
   const hangup = document.getElementById("hangup");
   const link = document.getElementById("link");
@@ -53,11 +52,7 @@ document.addEventListener("DOMContentLoaded", event => {
     alert("Browser not supported! Please use Safari");
   }
 
-  navigator.mediaDevices.getDisplayMedia({video: true,audio: true}).then(stream=>{screenstream=stream;}).catch(err=>{console.log(err);});
-
-  screensharebutton.addEventListener("click",function(){
-    
-    navigator.mediaDevices
+  navigator.mediaDevices
     .getUserMedia({
       video: true,
       audio: true
@@ -166,16 +161,14 @@ document.addEventListener("DOMContentLoaded", event => {
 
       //disable video
       disableVideo.addEventListener("click", () => {
-        //videoTracks = localStream.getVideoTracks();
-        //videoTracks=screenstream.getVideoTracks();
-        localStream=screenstream;
-        // for (var i = 0; i < videoTracks.length; ++i) {
-        //   videoTracks[i].enabled = !videoTracks[i].enabled;
-        //   if (disbalevideoenabled) disableVideoicon.className = "fas fa-video";
-        //   else disableVideoicon.className = "fas fa-video-slash";
+        videoTracks = localStream.getVideoTracks();
+        for (var i = 0; i < videoTracks.length; ++i) {
+          videoTracks[i].enabled = !videoTracks[i].enabled;
+          if (disbalevideoenabled) disableVideoicon.className = "fas fa-video";
+          else disableVideoicon.className = "fas fa-video-slash";
 
-        //   disbalevideoenabled = !disbalevideoenabled;
-        // }
+          disbalevideoenabled = !disbalevideoenabled;
+        }
       });
 
       //invite
@@ -198,6 +191,5 @@ document.addEventListener("DOMContentLoaded", event => {
         "Cannot get access to your media device! Check logs for more info."
       );
       console.log(err);
-    });});
-  
+    });
 });
