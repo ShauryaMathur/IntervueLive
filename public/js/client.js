@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", event => {
   const host_stream = document.getElementById("host_stream");
   const remote_stream = document.getElementById("remote_stream");
   const disableVideo = document.getElementById("disablevideo");
+  const shareScreen = document.getElementById("sharescreen");
   const mute = document.getElementById("mute");
   const hangup = document.getElementById("hangup");
   const link = document.getElementById("link");
@@ -38,6 +39,8 @@ document.addEventListener("DOMContentLoaded", event => {
     }
   };
 
+  //clipboard[0].addEventListener("click",()=>{$('.toast').toast()})
+
   //initialize app with getUserMedia
   navigator.getMedia =
     navigator.getUserMedia ||
@@ -61,7 +64,7 @@ document.addEventListener("DOMContentLoaded", event => {
       //emit new client
       socket.emit("new_client", room);
       localStream = stream;
-      console.log("screen2 in client", window.stream2);
+      //console.log("screen2 in client", window.stream2);
       host_stream.setAttribute("autoplay", "");
       host_stream.setAttribute("muted", "");
       host_stream.setAttribute("playsinline", "");
@@ -101,6 +104,7 @@ document.addEventListener("DOMContentLoaded", event => {
       const make_peer = () => {
         client.gotAnswer = false;
         let peer = init_peer("init");
+        console.log("I am the creator");
         peer.on("signal", data => {
           if (!client.gotAnswer) {
             socket.emit("offer", room, data);
@@ -178,6 +182,37 @@ document.addEventListener("DOMContentLoaded", event => {
       }
 
       invBtn.addEventListener("click", getUrl());
+
+      addMedia = stream => {
+        
+        host_stream.setAttribute("autoplay", "");
+        host_stream.setAttribute("muted", "");
+        host_stream.setAttribute("playsinline", "");
+
+        if ("srcObject" in host_stream) {
+          host_stream.srcObject = stream;
+        } else {
+          // old browsers
+          host_stream.src = URL.createObjectURL(stream);
+        }
+        //document.location.reload();
+        console.log("Done");
+      };
+
+      shareScreen.addEventListener("click", () => {
+        client.peer.removeStream(localStream);
+
+        navigator.mediaDevices
+          .getDisplayMedia({ audio: false, video: true })
+          .then(stream => {
+            localStream = stream;
+
+            client.peer.addStream(localStream);
+
+            //addMedia(stream);
+          })
+          .catch(err => console.log(err));
+      });
 
       //events
       socket.on("sent_offer", make_remote_peer);
