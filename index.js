@@ -37,7 +37,16 @@ app.get("/", (req, res) => {
 }) */
 
 //@route -> room
-app.get("/r/:room", (req, res) => {
+//To create Interviewer Room
+app.get("/interviewer/:room", (req, res) => {
+  if (rooms[req.params.room] == null) {
+    return res.render("roomdoesnotexist");
+  }
+  res.render("room", { room_name: req.params.room });
+});
+
+//Create Interviewee Room
+app.get("/candidate/:room", (req, res) => {
   if (rooms[req.params.room] == null) {
     return res.render("roomdoesnotexist");
   }
@@ -51,7 +60,7 @@ app.get("/createroom/:roomname", (req, res) => {
   }
   console.log("In");
   rooms[req.params.roomname] = { users: {} };
-  res.redirect(`/r/${req.params.roomname}`);
+  res.redirect(`/interviewer/${req.params.roomname}`);
   io.emit("room_created", req.params.roomname);
 });
 

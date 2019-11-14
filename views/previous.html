@@ -1,0 +1,99 @@
+<div style="width: 100%;">
+        <div style="width: 50%;float:left"><div class="v-header v-container">
+
+                <!--Remote stream-->
+                <div class="fullscreen-video-wrap">
+                  <video id="remote_stream" autoplay playsinline></video>
+                </div>
+            
+                <!--Scrollable Navigable Actionbar-->
+                <button id="settings" onClick="openNav()" class="btn btn-outline-primary" style="z-index:999;position: fixed;right: 20px;bottom: 20px">Open</button>
+                <div role="group" id="actionbar"  class="scrollmenu sidenav">
+                     <!-- Button trigger modal -->
+                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                     <div style="padding:10px;">
+                      <div class="tooltip">
+                          <span class="tooltiptext">Invite Candidate</span>
+                <button id="invite" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#inviteModal">
+                        <i class="far fa-envelope"></i>
+                      </button></div>
+                      <div class="tooltip">
+                          <span class="tooltiptext">Disable Video</span>
+                  <button id="disablevideo" type="button" class="btn btn-outline-primary">
+                    <i class="fas fa-video-slash" id="disableVideoicon"></i>
+                  </button></div>
+                  <div class="tooltip">
+                      <span class="tooltiptext">Mute</span>
+                  <button id="mute" type="button" class="btn btn-outline-primary ">
+                    <i class="fas fa-microphone-slash" id="muteicon"></i>
+                  </button></div>
+                  <div class="tooltip">
+                      <span class="tooltiptext">Share My Screen !</span>
+                  <button id="sharescreen" type="button" class="btn btn-outline-primary " >
+                    <i class="fas fa-desktop"></i>
+                  </button>
+                  </div>
+                  <!-- <div id="errorMsg"></div> -->
+                  <div class="tooltip">
+                      <span class="tooltiptext">End Call</span>
+                  <button id="hangup" type="button" class="btn btn-outline-danger ">
+                    <i class="fas fa-phone-slash" ></i>
+                  </button>
+                </div>
+                  </div>
+                </div>
+            
+                <!-- Modal -->
+                <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <div class="modal-header">
+                          <h6 class="modal-title">
+                            Share this session URL below to invite the candidate.
+                          </h6>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" id="link" style="padding: 10px;color: black;font-size: initial;margin-top: 6px;"/>
+                          <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-primary copy" data-clipboard-target="#link">
+                              <i class="far fa-copy"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+             
+                <!--Host stream-->
+                <div id="main" class="header-content container">
+                  <h1 id="waiting">Waiting for someone to join...</h1>
+                  <video id="host_stream" playsinline autoplay muted></video>
+                  <!-- <video id="gum-local" autoplay="" playsinline="" src="video.srcObject"></video> -->
+                </div>
+              </div>
+            </div>
+        <div style="width: 50%;float:right">
+          <select onchange="changeLanguage()" id="language">
+            <option value="javascript">Javascript</option>
+            <option value="python">Python</option>
+            <option value="mysql">mysql</option>
+            <option value="php">PHP</option>
+            <option value="r">R</option>
+            <option value="cpp">C++</option>
+            <option value="java">Java</option>
+            <option value="csharp">C#</option>
+          </select>
+          <select onchange="changeTheme()" id="theme">
+            <option value="vs-dark">Dark</option>
+            <option value="vs">Light</option>
+          </select>
+          <div id="monaco-editor" />
+        </div>
+    </div>
+  

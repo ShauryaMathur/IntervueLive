@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", event => {
+
+  document.documentElement.requestFullscreen();
+  console.log(location.hash);
+  if(location.hash==='#1')
+    console.log("I am creator");
+  else  
+    console.log("I sux")
+  
   let localStream,
     client = {};
   let audioenabled = true;
@@ -39,7 +47,13 @@ document.addEventListener("DOMContentLoaded", event => {
     }
   };
 
-  //clipboard[0].addEventListener("click",()=>{$('.toast').toast()})
+  document.addEventListener("visibilitychange",function(){
+    if(document.location.href.indexOf('interviewer')===-1){
+      confirm("Do NOT switch tabs!");
+
+    }
+      
+  });
 
   //initialize app with getUserMedia
   navigator.getMedia =
@@ -156,8 +170,8 @@ document.addEventListener("DOMContentLoaded", event => {
         let audioTracks = localStream.getAudioTracks();
         for (var i = 0; i < audioTracks.length; ++i) {
           audioTracks[i].enabled = !audioTracks[i].enabled;
-          if (audioenabled) muteicon.className = "fas fa-microphone";
-          else muteicon.className = "fas fa-microphone-slash";
+          if (audioenabled) muteicon.className = "fas fa-microphone fa-sm";
+          else muteicon.className = "fas fa-microphone-slash fa-sm";
 
           audioenabled = !audioenabled;
         }
@@ -168,8 +182,8 @@ document.addEventListener("DOMContentLoaded", event => {
         videoTracks = localStream.getVideoTracks();
         for (var i = 0; i < videoTracks.length; ++i) {
           videoTracks[i].enabled = !videoTracks[i].enabled;
-          if (disbalevideoenabled) disableVideoicon.className = "fas fa-video";
-          else disableVideoicon.className = "fas fa-video-slash";
+          if (disbalevideoenabled) disableVideoicon.className = "fas fa-video fa-sm";
+          else disableVideoicon.className = "fas fa-video-slash fa-sm";
 
           disbalevideoenabled = !disbalevideoenabled;
         }
@@ -177,7 +191,7 @@ document.addEventListener("DOMContentLoaded", event => {
 
       //invite
       function getUrl() {
-        let url = window.location.href;
+        let url = window.location.href.replace('interviewer','candidate');
         link.value = url;
       }
 
@@ -195,7 +209,9 @@ document.addEventListener("DOMContentLoaded", event => {
           // old browsers
           host_stream.src = URL.createObjectURL(stream);
         }
-        //document.location.reload();
+        
+        if(document.location.href.indexOf('interviewer')>-1)
+          document.location.reload();
         console.log("Done");
       };
 
