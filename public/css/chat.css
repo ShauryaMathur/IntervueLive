@@ -106,3 +106,7 @@ div.monaco-editor.no-user-select.vs-dark{
 /* .editor{
     height: 100%;
    } */
+.maximised-stream{
+	height: 260px !important;
+	width: 260px !important;
+}

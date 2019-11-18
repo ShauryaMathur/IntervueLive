@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", event => {
 
-  document.documentElement.requestFullscreen();
+  //document.documentElement.requestFullscreen();
   console.log(location.hash);
   if(location.hash==='#1')
     console.log("I am creator");
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", event => {
     client = {};
   let audioenabled = true;
   let disbalevideoenabled = true;
-  let url = "https://cgvideochat.herokuapp.com";
+  let url = "https://cginterviewtool.herokuapp.com";
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", event => {
   const waiting = document.getElementById("waiting");
   const muteicon = document.getElementById("muteicon");
   const disableVideoicon = document.getElementById("disableVideoicon");
+  const maximize=document.getElementById("maximize");
+  const remoteStreamVideoBox=document.getElementById("remote-stream-video-box");
 
   self.MonacoEnvironment = {
     getWorkerUrl: function(moduleId, label) {
@@ -47,13 +49,13 @@ document.addEventListener("DOMContentLoaded", event => {
     }
   };
 
-  document.addEventListener("visibilitychange",function(){
+ /*  document.addEventListener("visibilitychange",function(){
     if(document.location.href.indexOf('interviewer')===-1){
       confirm("Do NOT switch tabs!");
 
     }
       
-  });
+  }); */
 
   //initialize app with getUserMedia
   navigator.getMedia =
@@ -189,7 +191,12 @@ document.addEventListener("DOMContentLoaded", event => {
         }
       });
 
-      //invite
+      //maximise stream window
+      maximize.addEventListener("click",()=>{
+        remoteStreamVideoBox.className="videoBox2 maximised-stream";
+      });
+
+      //invite url
       function getUrl() {
         let url = window.location.href.replace('interviewer','candidate');
         link.value = url;
@@ -216,16 +223,23 @@ document.addEventListener("DOMContentLoaded", event => {
       };
 
       shareScreen.addEventListener("click", () => {
+        
         client.peer.removeStream(localStream);
 
         navigator.mediaDevices
-          .getDisplayMedia({ audio: false, video: true })
+          .getDisplayMedia({ audio: true, video: true })
           .then(stream => {
             localStream = stream;
 
-            client.peer.addStream(localStream);
+            client.peer.addStream(stream);
 
-            //addMedia(stream);
+            //client.peer.on('stream',stream=>{});
+            var videoTracks = stream.getVideoTracks();
+            for(let i=0;i<videoTracks.length;i++)
+              client.peer.addTrack(videoTracks[i],stream);
+
+            client.peer.signal();
+            addMedia(stream);
           })
           .catch(err => console.log(err));
       });
