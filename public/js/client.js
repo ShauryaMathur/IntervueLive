@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", event => {
 
-  //document.documentElement.requestFullscreen();
+  document.documentElement.requestFullscreen();
   console.log(location.hash);
   if(location.hash==='#1')
     console.log("I am creator");
@@ -28,10 +28,13 @@ document.addEventListener("DOMContentLoaded", event => {
   const waiting = document.getElementById("waiting");
   const muteicon = document.getElementById("muteicon");
   const disableVideoicon = document.getElementById("disableVideoicon");
+<<<<<<< HEAD
   const maximize=document.getElementById("maximize");
   const remoteStreamVideoBox=document.getElementById("remote-stream-video-box");
   const minimize=document.getElementById("minimize");
   let videoStreamMaximizeFlag = false;
+=======
+>>>>>>> Revert "Test new socket URL"
 
   self.MonacoEnvironment = {
     getWorkerUrl: function(moduleId, label) {
@@ -51,13 +54,13 @@ document.addEventListener("DOMContentLoaded", event => {
     }
   };
 
- /*  document.addEventListener("visibilitychange",function(){
+  document.addEventListener("visibilitychange",function(){
     if(document.location.href.indexOf('interviewer')===-1){
       confirm("Do NOT switch tabs!");
 
     }
       
-  }); */
+  });
 
   //initialize app with getUserMedia
   navigator.getMedia =
@@ -193,6 +196,7 @@ document.addEventListener("DOMContentLoaded", event => {
         }
       });
 
+<<<<<<< HEAD
       //maximise stream window
       maximize.addEventListener("click",()=>{
 
@@ -212,6 +216,9 @@ document.addEventListener("DOMContentLoaded", event => {
       });
 
       //invite url
+=======
+      //invite
+>>>>>>> Revert "Test new socket URL"
       function getUrl() {
         let url = window.location.href.replace('interviewer','candidate');
         link.value = url;
@@ -237,6 +244,7 @@ document.addEventListener("DOMContentLoaded", event => {
         console.log("Done");
       };
 
+<<<<<<< HEAD
       // shareScreen.addEventListener("click", () => {
         
       //   client.peer.removeStream(localStream);
@@ -258,6 +266,22 @@ document.addEventListener("DOMContentLoaded", event => {
       //     })
       //     .catch(err => console.log(err));
       // });
+=======
+      shareScreen.addEventListener("click", () => {
+        client.peer.removeStream(localStream);
+
+        navigator.mediaDevices
+          .getDisplayMedia({ audio: false, video: true })
+          .then(stream => {
+            localStream = stream;
+
+            client.peer.addStream(localStream);
+
+            //addMedia(stream);
+          })
+          .catch(err => console.log(err));
+      });
+>>>>>>> Revert "Test new socket URL"
 
       //events
       socket.on("sent_offer", make_remote_peer);

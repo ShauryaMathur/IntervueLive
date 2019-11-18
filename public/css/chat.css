@@ -106,6 +106,7 @@
     top: 4px;
     left: 3px;
 }
+<<<<<<< HEAD
 .btn-floating.btn-sm.btn-cyan.btn-rounded {
     width: 22px;
     height: 22px;
@@ -129,3 +130,8 @@
     font-style: normal;
     font-weight: 300;
 }
+=======
+/* .editor{
+    height: 100%;
+   } */
+>>>>>>> Revert "Test new socket URL"
