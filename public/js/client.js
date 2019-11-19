@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", event => {
     client = {};
   let audioenabled = true;
   let disbalevideoenabled = true;
-  let url = "https://cginterviewtool.herokuapp.com";
+  let url = "https://cgvideochat.herokuapp.com";
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", event => {
   const host_stream = document.getElementById("host_stream");
   const remote_stream = document.getElementById("remote_stream");
   const disableVideo = document.getElementById("disablevideo");
-  const shareScreen = document.getElementById("sharescreen");
+ // const shareScreen = document.getElementById("sharescreen");
   const mute = document.getElementById("mute");
   const hangup = document.getElementById("hangup");
   const link = document.getElementById("link");
@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", event => {
   const disableVideoicon = document.getElementById("disableVideoicon");
   const maximize=document.getElementById("maximize");
   const remoteStreamVideoBox=document.getElementById("remote-stream-video-box");
+  const minimize=document.getElementById("minimize");
+  let videoStreamMaximizeFlag = false;
 
   self.MonacoEnvironment = {
     getWorkerUrl: function(moduleId, label) {
@@ -193,7 +195,20 @@ document.addEventListener("DOMContentLoaded", event => {
 
       //maximise stream window
       maximize.addEventListener("click",()=>{
-        remoteStreamVideoBox.className="videoBox2 maximised-stream";
+
+        videoStreamMaximizeFlag=true;
+
+        if(videoStreamMaximizeFlag){
+          remoteStreamVideoBox.className="video-box2 maximized-stream";
+        }
+      });
+
+      //Minimize stream window
+      minimize.addEventListener('click',()=>{
+        
+        videoStreamMaximizeFlag=false;
+        if(!videoStreamMaximizeFlag)
+          remoteStreamVideoBox.classList.remove("maximized-stream");
       });
 
       //invite url
@@ -222,27 +237,27 @@ document.addEventListener("DOMContentLoaded", event => {
         console.log("Done");
       };
 
-      shareScreen.addEventListener("click", () => {
+      // shareScreen.addEventListener("click", () => {
         
-        client.peer.removeStream(localStream);
+      //   client.peer.removeStream(localStream);
 
-        navigator.mediaDevices
-          .getDisplayMedia({ audio: true, video: true })
-          .then(stream => {
-            localStream = stream;
+      //   navigator.mediaDevices
+      //     .getDisplayMedia({ audio: true, video: true })
+      //     .then(stream => {
+      //       localStream = stream;
 
-            client.peer.addStream(stream);
+      //       client.peer.addStream(stream);
 
-            //client.peer.on('stream',stream=>{});
-            var videoTracks = stream.getVideoTracks();
-            for(let i=0;i<videoTracks.length;i++)
-              client.peer.addTrack(videoTracks[i],stream);
+      //       //client.peer.on('stream',stream=>{});
+      //       var videoTracks = stream.getVideoTracks();
+      //       for(let i=0;i<videoTracks.length;i++)
+      //         client.peer.addTrack(videoTracks[i],stream);
 
-            client.peer.signal();
-            addMedia(stream);
-          })
-          .catch(err => console.log(err));
-      });
+      //       // client.peer.signal();
+      //       // addMedia(stream);
+      //     })
+      //     .catch(err => console.log(err));
+      // });
 
       //events
       socket.on("sent_offer", make_remote_peer);

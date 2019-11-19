@@ -41,13 +41,13 @@
 <body>
 
 <!--Header Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-dark cyan"> <a class="navbar-brand" href="#"><img src="/img/logo-light-text.png" ></a>
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark cyan"> <span><a href="#"><img src="/img/logo.png"></a></span><span><a class="navbar-brand" href="#"><img src="/img/logo-light-text.png" ></a></span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4"
                       aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item active"> <a class="nav-link" href="#"> <i class="fas fa-cogs"></i> Settings </a> </li>
-      <li class="nav-item"> <a class="nav-link" href="#"> <i class="fas fa-power-off"></i> Log out</a> </li>
+      <!-- <li class="nav-item active"> <a class="nav-link" href="#"> <i class="fas fa-cogs"></i> Settings </a> </li> -->
+      <li class="nav-item" style="color:red"> <img src="/img/beta-vertical.png" height="50px"> </li>
     </ul>
   </div>
 </nav>
@@ -112,24 +112,21 @@
     <!--Grid row-->
     <div class="video-box1">
         <video id="host_stream" class="img-fluid" playsinline autoplay muted ></video></div>
-    <div style="right: 0;
-    top: 0;
-    position: absolute;">
-      <ul>
-        <li><a id="maximize"><i class="fas fa-window-maximize" aria-hidden="true"></i></a></li>
-      </ul>
-      <div class="video-box2" id="remote-stream-video-box">
-        <p id="waiting">Waiting for someone to join...</p>
-        <video id="remote_stream" class="img-fluid" style="position: absolute" playsinline></video> </div>
-    </div>
     
+      <div class="video-box2" id="remote-stream-video-box">
+          <div class="btn-group btn-group-sm btn-video" role="group">
+            <button id="maximize" class="btn-floating btn-sm btn-cyan btn-rounded"><i class="fa fa-window-maximize"></i></button>
+            <button id="minimize" class="btn-floating btn-sm btn-cyan btn-rounded"><i class="fa fa-times"></i></button></div>
+        <p id="waiting">Waiting for someone to join...</p>
+        <video id="remote_stream" class="img-fluid" playsinline></video> 
+    </div>    
     <!--Floating Menu-->
     <nav class="floating-menu">
     <ul class="main-menu">
       <li> <a id="invite" class="ripple" data-toggle="modal" data-target="#inviteModal"> <i class="fas fa-envelope fa-sm"></i> </a> </li>
       <li> <a id="disablevideo" class="ripple"> <i class="fas fa-video-slash fa-sm" id="disableVideoicon"></i> </a> </li>
       <li> <a id="mute" class="ripple"> <i class="fas fa-microphone-slash fa-sm" id="muteicon"></i> </a> </li>
-      <li> <a id="sharescreen" class="ripple"> <i class="fas fa-desktop fa-sm"></i> </a> </li>
+      <!-- <li> <a id="sharescreen" class="ripple"> <i class="fas fa-desktop fa-sm"></i> </a> </li> -->
       <li> <a id="hangup" class="ripple"> <i class="fas fa-phone-slash fa-sm"></i> </a> </li>
     </ul>
     <div class="menu-bg"></div>
