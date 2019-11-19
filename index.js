@@ -3,7 +3,7 @@ const cors = require("cors");
 const app = express();
 const server = require("http").Server(app);
 const WebSocket = require("ws");
-const http = require("http");
+//const http = require("http");
 
 //const StaticServer = require('node-static').Server
 const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
@@ -14,7 +14,7 @@ const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
 const io = require("socket.io")(server);
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+//app.use(cors());
 
 //middleware
 app.set("views", "./views");
@@ -24,6 +24,17 @@ app.use(express.urlencoded({ extended: true }));
 //const staticServer = new StaticServer('.', { cache: production ? 3600 : false, gzip: production })
 
 const rooms = {};
+
+//@route -> createroom[post]
+app.get("/createroom/:roomname", (req, res) => {
+  if (rooms[req.params.roomname] != null) {
+    return res.render("roomalreadyexists");
+  }
+  console.log("In");
+  rooms[req.params.roomname] = { users: {} };
+  res.redirect(`/interviewer/${req.params.roomname}`);
+  io.emit("room_created", req.params.roomname);
+});
 
 //@route -> index
 app.get("/", (req, res) => {
@@ -53,16 +64,6 @@ app.get("/candidate/:room", (req, res) => {
   res.render("room", { room_name: req.params.room });
 });
 
-//@route -> createroom[post]
-app.get("/createroom/:roomname", (req, res) => {
-  if (rooms[req.params.roomname] != null) {
-    return res.render("roomalreadyexists");
-  }
-  console.log("In");
-  rooms[req.params.roomname] = { users: {} };
-  res.redirect(`/interviewer/${req.params.roomname}`);
-  io.emit("room_created", req.params.roomname);
-});
 
 //socket connection established
 io.on("connection", socket => {
@@ -71,7 +72,7 @@ io.on("connection", socket => {
       if (error) {
         throw error;
       }
-      if (clients.length >= 2) {
+      if (clients.length >= 3) {
         socket.emit("session_active");
         return;
       }
