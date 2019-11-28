@@ -38,7 +38,6 @@ window.addEventListener("load", () => {
     document.getElementById("monaco-editor"),
     {
       value: "",
-      language: "javascript",
       theme: "vs-dark",
       automaticLayout: true
     }
