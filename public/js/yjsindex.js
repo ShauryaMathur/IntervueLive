@@ -40,7 +40,7 @@ window.addEventListener("load", () => {
       value: "",
       theme: "vs-dark",
       automaticLayout: true,
-      language:'java',
+      language:"java",
       formatOnType:false,
       formatOnPaste:false
     }
