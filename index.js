@@ -120,7 +120,7 @@ app.use(function(req, res, next) {
 /* server2.listen(port, () => {
   console.log(`Server for wbsocket started on PORT --> ${PORT}`);
 }); */
-server.listen(8080,() => {
+server.listen(80,() => {
   console.log(`Server started on PORT --> 8080`);
   var host = server.address().address;
     console.log('EEA-mockserver server listening on host:' + host + ":");
