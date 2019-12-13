@@ -72,7 +72,7 @@ io.on("connection", socket => {
       if (error) {
         throw error;
       }
-      if (clients.length >= 3) {
+      if (clients.length >= 2) {
         socket.emit("session_active");
         return;
       }
