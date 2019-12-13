@@ -39,7 +39,10 @@ window.addEventListener("load", () => {
     {
       value: "",
       theme: "vs-dark",
-      automaticLayout: true
+      automaticLayout: true,
+      language:'java',
+      formatOnType:false,
+      formatOnPaste:false
     }
   );
   const monacoBinding = new MonacoBinding(
