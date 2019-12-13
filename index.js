@@ -15,7 +15,7 @@ const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
 
 const io = require("socket.io")(server);
 const PORT = process.env.PORT || 5000;
-
+//exports.PORT=PORT;
 //app.use(cors());
 
 //middleware
@@ -120,18 +120,18 @@ app.use(function(req, res, next) {
 /* server2.listen(port, () => {
   console.log(`Server for wbsocket started on PORT --> ${PORT}`);
 }); */
-server.listen(80,() => {
-  console.log(`Server started on PORT --> 8080`);
+server.listen(PORT,() => {
+  console.log(`Server started on PORT --> 5000`);
   var host = server.address().address;
     console.log('EEA-mockserver server listening on host:' + host + ":");
 });
 
-server6.listen(5000, function() {
+/* server6.listen(5000, function() {
   var host = server6.address().address;
   console.log('EEA-mockserver server listening on host:' + host + ":");
-});
+}); */
 
-const wss = new WebSocket.Server({ server:server6 });
+const wss = new WebSocket.Server({ server });
 
 wss.on("connection", (conn, req) =>
   setupWSConnection(conn, req, {
