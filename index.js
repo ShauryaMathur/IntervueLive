@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const server = require("http").Server(app);
+
+const server6 = require("http").Server(app);
 const WebSocket = require("ws");
 //const http = require("http");
 
@@ -30,11 +32,19 @@ app.get("/createroom/:roomname", (req, res) => {
   if (rooms[req.params.roomname] != null) {
     return res.render("roomalreadyexists");
   }
-  console.log("In");
+  
   rooms[req.params.roomname] = { users: {} };
-  res.redirect(`/interviewer/${req.params.roomname}`);
+  console.log("In",rooms);
+  //res.redirect(`/interviewer/${req.params.roomname}`);
+  res.status(200);
   io.emit("room_created", req.params.roomname);
 });
+
+//@route -> For Diconnecting Interview
+app.get("/disconnect/:roomname",(req,res)=>{
+  var key=req.params.roomname;
+  delete rooms[key];
+})
 
 //@route -> index
 app.get("/", (req, res) => {
@@ -106,16 +116,25 @@ app.use(function(req, res, next) {
   res.status(404);
   res.send("404");
 });
-const wss = new WebSocket.Server({ server });
+
+/* server2.listen(port, () => {
+  console.log(`Server for wbsocket started on PORT --> ${PORT}`);
+}); */
+server.listen(PORT, "0.0.0.0",() => {
+  console.log(`Server started on PORT --> ${PORT}`);
+  var host = server.address().address;
+    console.log('EEA-mockserver server listening on host:' + host + ":");
+});
+
+server6.listen(PORT, "::1",  function() {
+  var host = server6.address().address;
+  console.log('EEA-mockserver server listening on host:' + host + ":");
+});
+
+const wss = new WebSocket.Server({ server:server6 });
 
 wss.on("connection", (conn, req) =>
   setupWSConnection(conn, req, {
     gc: req.url.slice(1) !== "prosemirror-versions"
   })
 );
-/* server2.listen(port, () => {
-  console.log(`Server for wbsocket started on PORT --> ${PORT}`);
-}); */
-server.listen(PORT, () => {
-  console.log(`Server started on PORT --> ${PORT}`);
-});

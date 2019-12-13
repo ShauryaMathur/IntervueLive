@@ -1,17 +1,13 @@
 document.addEventListener("DOMContentLoaded", event => {
 
   //document.documentElement.requestFullscreen();
-  console.log(location.hash);
-  if(location.hash==='#1')
-    console.log("I am creator");
-  else  
-    console.log("I sux")
   
   let localStream,
     client = {};
   let audioenabled = true;
   let disbalevideoenabled = true;
-  let url = "https://cgvideochat.herokuapp.com";
+  let url = "http://127.0.0.1:5000";
+  const axios = require('axios');
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
@@ -23,6 +19,9 @@ document.addEventListener("DOMContentLoaded", event => {
  // const shareScreen = document.getElementById("sharescreen");
   const mute = document.getElementById("mute");
   const hangup = document.getElementById("hangup");
+  if(location.href.indexOf('/candidate/')!=-1){
+    hangup.remove();
+  }
   const link = document.getElementById("link");
   const invBtn = document.getElementById("invite");
   const waiting = document.getElementById("waiting");
@@ -156,6 +155,7 @@ document.addEventListener("DOMContentLoaded", event => {
       //handle destroy peer
       const remove_peer = () => {
         remote_stream.remove();
+        // socket.emit
         window.location.href = "/";
         if (client.peer) {
           client.peer.destroy();
@@ -166,7 +166,16 @@ document.addEventListener("DOMContentLoaded", event => {
       hangup.addEventListener("click", () => {
         socket.emit("user_disconnected", room);
         //console.log(`ROOOM:::${room}`)
+        //remove_peer();
+        console.log('Click');
+
+        axios.get('/disconnect/'+room)
+        .then(function(res){
+          console.log(res);
+        })
+        .catch(function(err){console.log(err);})
         remove_peer();
+
       });
 
       //mute audio
