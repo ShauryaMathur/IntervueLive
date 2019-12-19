@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -14,9 +15,9 @@ const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
 //const port = process.env.PORT || 8080
 
 const io = require("socket.io")(server);
-const PORT = process.env.PORT || 5000;
-
-//app.use(cors());
+const PORT = process.env.PORT || 80;
+//const whitelist = [ 'https://test2.codegrounds.co'];
+app.use(cors({ origin: 'https://codegrounds.co.in', credentials: true }));
 
 //middleware
 app.set("views", "./views");
@@ -120,13 +121,13 @@ app.use(function(req, res, next) {
 /* server2.listen(port, () => {
   console.log(`Server for wbsocket started on PORT --> ${PORT}`);
 }); */
-server.listen(8080,() => {
-  console.log(`Server started on PORT --> 8080`);
+server.listen(81,() => {
+  console.log(`Server started on PORT --> 80`);
   var host = server.address().address;
     console.log('EEA-mockserver server listening on host:' + host + ":");
 });
 
-server6.listen(5000, function() {
+server6.listen(80, function() {
   var host = server6.address().address;
   console.log('EEA-mockserver server listening on host:' + host + ":");
 });
