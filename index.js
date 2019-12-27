@@ -156,8 +156,8 @@ io.on("connection", socket => {
   console.log(`Server for wbsocket started on PORT --> ${PORT}`);
 }); */
 
-server.listen(5000,() => {
-    console.log('Video server listening on port: 5000');
+server.listen(80,() => {
+    console.log('Video server listening on port: 80');
 });
 
 server6.listen(8080, function() {
