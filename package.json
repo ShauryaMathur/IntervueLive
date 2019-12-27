@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack && npm run dev",
     "mini": " cd public/js && browserify jquery.min.js client.js -o bundle.js",
-    "dev": " npm run mini && nodemon ./index"
+    "dev": " npm run mini && nodemon ./index",
+    "sim": "concurrently \"nodemon ./index\" \"watchify public/js/jquery.min.js public/js/client.js -o public/js/bundle.js -v\""
   },
   "dependencies": {
     "@atlaskit/editor-core": "^113.1.0",
@@ -20,6 +21,7 @@
     "browserify": "^16.5.0",
     "codemirror": "^5.49.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "destroy": "^1.0.4",
     "detectrtc": "^1.3.9",
     "ejs": "^2.6.2",
@@ -41,12 +43,14 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-intl": "^3.3.0",
+    "reverse-md5": "0.0.4",
     "rollup-plugin-postcss": "^2.0.3",
     "rxjs-compat": "^6.5.3",
     "send": "^0.17.1",
     "simple-peer": "^9.5.0",
     "socket.io": "^2.3.0",
     "webpack": "^4.41.0",
+    "websocketserver": "^1.0.0",
     "ws": "^7.1.2",
     "y-codemirror": "^1.0.1",
     "y-monaco": "0.0.1",
@@ -58,8 +62,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^5.0.2",
     "css-loader": "^3.2.0",
     "style-loader": "^1.0.0",
+    "watchify": "^3.11.1",
     "webpack-cli": "^3.3.9"
   }
 }

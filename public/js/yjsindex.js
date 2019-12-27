@@ -27,8 +27,8 @@ window.addEventListener("load", () => {
   const ydoc = new Y.Doc();
 
   const provider = new WebsocketProvider(
-    `${location.protocol === "http:" ? "ws:" : "wss:"}${location.host}`,
-    location.href.split("/")[4].toString(),
+    'ws:localhost:8080',
+    (location.href.indexOf('/interviewer')!=-1)?location.href.split("/")[5].toString():location.href.split("/")[4].toString(),
     ydoc
   );
   console.log(provider);
