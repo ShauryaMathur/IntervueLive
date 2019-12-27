@@ -1,12 +1,20 @@
 const express = require("express");
 var ReverseMd5 = require('reverse-md5');
+const fs = require('fs');
 const cors = require("cors");
 const app = express();
-const server = require("http").Server(app);
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
+const server = require("https").Server(options,app);
 const crypto = require('crypto')
 
-const server6 = require("http").Server(app);
+const server6 = require("https").Server(options,app);
 const WebSocket = require("ws");
+
+
+
 //const http = require("http");
 
 //const StaticServer = require('node-static').Server
@@ -107,6 +115,18 @@ app.get("/candidate/:room", (req, res) => {
   res.render("room", { room_name: req.params.room });
 });
 
+// app.get('/app1socket',()=> {
+//   proxy_pass http://127.0.0.1:3000/socket.io/;
+//   proxy_http_version 1.1;
+//   proxy_set_header Upgrade $http_upgrade;
+//   proxy_set_header Connection "upgrade";
+//   proxy_set_header Host $host;
+//   proxy_cache_bypass $http_upgrade;
+// }) ;
+
+app.get('*',(req,res)=>{
+  res.render("index", { rooms: rooms });
+});
 
 //socket connection established
 io.on("connection", socket => {
@@ -160,11 +180,11 @@ server.listen(80,() => {
     console.log('Video server listening on port: 80');
 });
 
-server6.listen(8080, function() {
-  console.log('Site and CollabEditor server listening on port: 8080');
+server6.listen(8443, function() {
+  console.log('Site and CollabEditor server listening on port: 8443');
 }); 
 const wss = new WebSocket.Server({ server:server6 });
-
+console.log("hello\n\n", process.env.PORT,"hello\n\n");
 wss.on("connection", (conn, req) =>
   setupWSConnection(conn, req, {
     gc: req.url.slice(1) !== "prosemirror-versions"
