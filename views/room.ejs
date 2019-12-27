@@ -34,7 +34,7 @@
   
 <!-- Custom JS-->
 <script src="/dist/monaco.bundle.js" type="text/javascript" defer></script>
-<script src="../js/bundle.js" type="text/javascript"  defer></script>
+<script src="/js/bundle.js" type="text/javascript"  defer></script>
      
 </head>
 
@@ -104,6 +104,7 @@
           <option value="vs">Light</option>
         </select>
         <div id="monaco-editor" style="height: 350px;"/></div>
+        <button style="margin-left: 45%;" ><a id="compile" target="_blank" href="https://www.jdoodle.com/online-java-compiler/">Compile and Run</a> </button>
         </div>
     </div>
     </div>
@@ -124,6 +125,7 @@
     <nav class="floating-menu">
     <ul class="main-menu">
       <li> <a id="invite" class="ripple" data-toggle="modal" data-target="#inviteModal"> <i class="fas fa-envelope fa-sm"></i> </a> </li>
+      <li><a class="ripple" id="fullscreen"><i class="fas fa-expand"></i></a></li>
       <li> <a id="disablevideo" class="ripple"> <i class="fas fa-video-slash fa-sm" id="disableVideoicon"></i> </a> </li>
       <li> <a id="mute" class="ripple"> <i class="fas fa-microphone-slash fa-sm" id="muteicon"></i> </a> </li>
       <!-- <li> <a id="sharescreen" class="ripple"> <i class="fas fa-desktop fa-sm"></i> </a> </li> -->
@@ -154,15 +156,25 @@ function closeNav() {
   document.getElementById("settings").style.display="block";
 }
 
-    function changeLanguage(){
-        var language = document.getElementById('language').value;
-        console.log(language);
-        monaco.editor.setModelLanguage(window.editor.getModel(), language);
-      }
-      function changeTheme(){
-        var theme = document.getElementById('theme').value;
-        monaco.editor.setTheme(theme);
-      }
+function changeLanguage(){
+  var compilerLinksMap={"java":'https://www.jdoodle.com/online-java-compiler/',
+    "javascript":'https://www.jdoodle.com/execute-nodejs-online/'
+    ,"python":'https://www.jdoodle.com/python3-programming-online/'
+    ,"mysql":'https://www.jdoodle.com/execute-sql-online/'
+    ,"php":'https://www.jdoodle.com/php-online-editor/'
+    ,"r":'https://www.jdoodle.com/execute-r-online/'
+    ,"cpp":'https://www.jdoodle.com/online-compiler-c++17/'
+    ,"csharp":'https://www.jdoodle.com/compile-c-sharp-online/'}
+    var language = document.getElementById('language').value;
+    console.log(language);
+    monaco.editor.setModelLanguage(window.editor.getModel(), language);
+    document.getElementById("compile").setAttribute("href",compilerLinksMap[language]);
+    console.log(document.getElementById("compile").href);
+  }
+  function changeTheme(){
+    var theme = document.getElementById('theme').value;
+    monaco.editor.setTheme(theme);
+  }
   </script>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>

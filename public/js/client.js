@@ -1,18 +1,20 @@
 document.addEventListener("DOMContentLoaded", event => {
-
-  //document.documentElement.requestFullscreen();
   
   let localStream,
     client = {};
+
+
+  //var compilerLinksMap={"ava":}
   let audioenabled = true;
   let disbalevideoenabled = true;
-  let url = "https://test2.codegrounds.co.in";
+  let url = "http://localhost:5000";
   const axios = require('axios');
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
   const DetectRTC = require("detectrtc");
   const clipboard = new ClipboardJS(".copy");
+  const fullscreen=document.getElementById('fullscreen');
   const host_stream = document.getElementById("host_stream");
   const remote_stream = document.getElementById("remote_stream");
   const disableVideo = document.getElementById("disablevideo");
@@ -190,6 +192,9 @@ document.addEventListener("DOMContentLoaded", event => {
         }
       });
 
+      //goto FullScreen
+      fullscreen.addEventListener('click',()=>{document.documentElement.requestFullscreen();console.log('done');});
+
       //disable video
       disableVideo.addEventListener("click", () => {
         videoTracks = localStream.getVideoTracks();
@@ -222,7 +227,7 @@ document.addEventListener("DOMContentLoaded", event => {
 
       //invite url
       function getUrl() {
-        let url = window.location.href.replace('interviewer','candidate');
+        let url = window.location.href.replace('interviewer','candidate').replace(window.location.href.split('/')[4]+'/','');
         link.value = url;
       }
 
@@ -241,8 +246,8 @@ document.addEventListener("DOMContentLoaded", event => {
           host_stream.src = URL.createObjectURL(stream);
         }
         
-        if(document.location.href.indexOf('interviewer')>-1)
-          document.location.reload();
+        /* if(document.location.href.indexOf('interviewer')>-1)
+          document.location.reload(); */
         console.log("Done");
       };
 
