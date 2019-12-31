@@ -1,13 +1,16 @@
+
+
+
 document.addEventListener("DOMContentLoaded", event => {
   
   let localStream,
     client = {};
 
-
+   
   //var compilerLinksMap={"ava":}
   let audioenabled = true;
   let disbalevideoenabled = true;
-  let url = "https://codegrounds.co.in";
+  let url = "https://localhost";
   const axios = require('axios');
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
@@ -21,11 +24,14 @@ document.addEventListener("DOMContentLoaded", event => {
  // const shareScreen = document.getElementById("sharescreen");
   const mute = document.getElementById("mute");
   const hangup = document.getElementById("hangup");
+  const invBtn = document.getElementById("invite");
   if(location.href.indexOf('/candidate/')!=-1){
     hangup.remove();
+    disableVideo.remove();
+    mute.remove();
+    invBtn.remove();
   }
   const link = document.getElementById("link");
-  const invBtn = document.getElementById("invite");
   const waiting = document.getElementById("waiting");
   const muteicon = document.getElementById("muteicon");
   const disableVideoicon = document.getElementById("disableVideoicon");

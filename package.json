@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack && npm run dev",
+    "build": "webpack && npm run mini",
     "mini": " cd public/js && browserify jquery.min.js client.js -o bundle.js",
     "dev": " npm run mini && nodemon ./index",
-    "sim": "concurrently \"nodemon ./index\" \"watchify public/js/jquery.min.js public/js/client.js -o public/js/bundle.js -v\""
+    "sim": "concurrently \"nodemon ./index\" \"watchify public/js/jquery.min.js public/js/client.js -o public/js/bundle.js -v\"",
+    "start":"node ./index.js "
   },
   "dependencies": {
     "@atlaskit/editor-core": "^113.1.0",
