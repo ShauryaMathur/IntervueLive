@@ -83,16 +83,33 @@ app.get("/", (req, res) => {
 //@route -> room
 //To create Interviewer Room
 app.get("/interviewer/:token/:room", (req, res) => {
-
-  var salt='DevelopedByManojAndShaurya';
-  
-
+  var salt = "DevelopedByManojAndShaurya";
+  var text=req.params.room+salt;
+  // var url = 'http://localhost:8080/ajax/ats/encrypt/'+text;
   var hash = crypto.createHash('md5').update(req.params.room+salt).digest("hex");
-  console.log('hash',hash);
+//   http.get(url, (resp) => {
+//   let data = '';
+//   // A chunk of data has been recieved.
+//   resp.on('data', (chunk) => {
+//     data += chunk;
+//   });
+
+//   // The whole response has been received. Print out the result.
+//   resp.on('end', () => {
+//     // console.log(JSON.parse(data).explanation);
+//     hash = data;
+//     console.log(hash,"yaha \n\n\n\n");
+//   });
+
+// }).on("error", (err) => {
+//   console.log("Error: " + err.message);
+// });
+  // console.log(req.params,"\n\n\nvdvfd");
+  // var hash = ;
+  console.log('hash',hash,"   ",);
   if (rooms[req.params.room] != null) {
     return res.render("roomalreadyexists");
   }
-  
   rooms[req.params.room] = { users: {} };
   console.log("In",rooms);
   //res.redirect(`/interviewer/${req.params.roomname}`);
@@ -176,12 +193,12 @@ io.on("connection", socket => {
   console.log(`Server for wbsocket started on PORT --> ${PORT}`);
 }); */
 
-server.listen(80,() => {
-    console.log('Video server listening on port: 80');
+server.listen(443,() => {
+    console.log('Video server listening on port: 443');
 });
 
-server6.listen(8443, function() {
-  console.log('Site and CollabEditor server listening on port: 8443');
+server6.listen(5000, function() {
+  console.log('Site and CollabEditor server listening on port: 5000');
 }); 
 const wss = new WebSocket.Server({ server:server6 });
 console.log("hello\n\n", process.env.PORT,"hello\n\n");
