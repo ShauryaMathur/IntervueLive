@@ -89,7 +89,7 @@
         Are you sure you want to end the Interview?
       </div>
         <div class="modal-footer" style="height:50px;">
-          <button type="button" data-dismiss="modal" class="btn btn-primary" id="hangupConfirmationButton" style="height: 30px;
+          <button type="button" data-dismiss="modal" class="btn btn-primary" id="hangupConfirmationButton" style="height: 30px;background-color: #3bbcd4 !important;
           padding: 0.5em;">End Interview</button>
           <button type="button" data-dismiss="modal" class="btn" style="color: black;height: 30px;
           padding: 0.5em;">Continue</button>
@@ -98,18 +98,6 @@
       </div>
     </div>
   </div>
-<!--./Terminate Interview Modal-->
-
-<!-- Terminate Interview Modal -->
-<!-- <div class="modal hide fade" id="disconnectModal" tabindex="-1" >
-  <div class="modal-body">
-    Are you sure you want to end the Interview?
-  </div>
-  <div class="modal-footer">
-    <button type="button" data-dismiss="modal" class="btn btn-primary" id="hangupConfirmationButton">End Interview</button>
-    <button type="button" data-dismiss="modal" class="btn">Continue</button>
-  </div>
-</div> -->
 <!--./Terminate Interview Modal-->
 
 <div class="container-fluid"> 
@@ -154,9 +142,9 @@
 
   <div class="video-box2" id="remote-stream-video-box">
     <div class="btn-group btn-group-sm btn-video" role="group">
-      <button id="maximize" class="btn-floating btn-sm btn-cyan btn-rounded"><i
+      <button id="maximize" class="btn-floating btn-sm btn-cyan btn-rounded"><i id="maximizeIcon"
           class="fa fa-window-maximize"></i></button>
-      <button id="minimize" class="btn-floating btn-sm btn-cyan btn-rounded"><i class="fa fa-window-minimize"></i></button></div>
+    </div>
     <p id="waiting">Waiting for someone to join...</p>
     <video id="remote_stream" class="img-fluid" playsinline></video>
   </div>

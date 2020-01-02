@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", event => {
     client = {};
   let audioenabled = true;
   let disbalevideoenabled = true;
-  let url = "https://localhost";
+  let url = "https://interviews.codeground.in";
   const axios = require("axios");
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
@@ -24,13 +24,13 @@ document.addEventListener("DOMContentLoaded", event => {
   const muteicon = document.getElementById("muteicon");
   const disableVideoicon = document.getElementById("disableVideoicon");
   const maximize = document.getElementById("maximize");
+  const maximizeIcon = document.getElementById("maximizeIcon");
   const remoteStreamVideoBox = document.getElementById(
     "remote-stream-video-box"
   );
   const hangupConfirmationButton = document.getElementById(
     "hangupConfirmationButton"
   );
-  const minimize = document.getElementById("minimize");
   fullscreen.title = "FullScreen";
   disableVideo.title = "Disable Video";
   mute.title = "Disable Audio";
@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", event => {
   compileAndRun.title = "Compile and Run";
   // const shareScreen = document.getElementById("sharescreen");
   hangup.title = "Disconnect Call";
+  videoStreamMaximizeFlag = true;
 
   if (location.href.indexOf("/candidate/") != -1) {
     hangup.remove();
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", event => {
     mute.remove();
     invBtn.remove();
   }
-  let videoStreamMaximizeFlag = false;
+  //let videoStreamMaximizeFlag = false;
 
   // self.MonacoEnvironment = {
   //   getWorkerUrl: function(moduleId, label) {
@@ -236,18 +237,20 @@ document.addEventListener("DOMContentLoaded", event => {
 
       //maximise stream window
       maximize.addEventListener("click", () => {
-        videoStreamMaximizeFlag = true;
+        
 
         if (videoStreamMaximizeFlag) {
           remoteStreamVideoBox.className = "video-box2 maximized-stream";
-        }
-      });
+          maximizeIcon.className="fa fa-window-minimize";
+          videoStreamMaximizeFlag=false;
 
-      //Minimize stream window
-      minimize.addEventListener("click", () => {
-        videoStreamMaximizeFlag = false;
-        if (!videoStreamMaximizeFlag)
+        }else{
+          console.log('here');
           remoteStreamVideoBox.classList.remove("maximized-stream");
+          maximizeIcon.className="fa fa-window-maximize";
+          videoStreamMaximizeFlag=true;
+        }
+        
       });
 
       //invite url

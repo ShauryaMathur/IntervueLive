@@ -27,7 +27,7 @@ window.addEventListener("load", () => {
   const ydoc = new Y.Doc();
 
   const provider = new WebsocketProvider(
-    "wss:localhost:5000",
+    "wss:interviews.codeground.in:5000",
     location.href.indexOf("/interviewer") != -1
       ? location.href.split("/")[5].toString()
       : location.href.split("/")[4].toString(),
