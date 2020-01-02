@@ -142,7 +142,7 @@
 
   <div class="video-box2" id="remote-stream-video-box">
     <div class="btn-group btn-group-sm btn-video" role="group">
-      <button id="maximize" class="btn-floating btn-sm btn-cyan btn-rounded"><i id="maximizeIcon"
+      <button id="maximize" class="btn-floating btn-sm btn-cyan btn-rounded" title="Maximise Window"><i id="maximizeIcon"
           class="fa fa-window-maximize"></i></button>
     </div>
     <p id="waiting">Waiting for someone to join...</p>
@@ -151,13 +151,13 @@
   <!--Floating Menu-->
   <nav class="floating-menu">
     <ul class="main-menu">
-      <li> <a id="invite" class="ripple" data-target="#inviteModal" data-toggle="modal"> <i class="fas fa-envelope fa-sm"></i> </a> </li>
-      <li><a class="ripple" id="fullscreen" ><i class="fas fa-expand"></i></a></li>
-      <li> <a id="disablevideo" class="ripple"><i class="fas fa-video-slash fa-sm" id="disableVideoicon"></i> </a> </li>
-      <li> <a id="mute" class="ripple" > <i class="fas fa-microphone-slash fa-sm" id="muteicon"></i> </a> </li>
+      <li> <a id="invite" class="ripple" title = "Invite Candidate" data-target="#inviteModal" data-toggle="modal"> <i class="fas fa-envelope fa-sm"></i> </a> </li>
+      <li><a class="ripple" id="fullscreen" title = "FullScreen"><i class="fas fa-expand"></i></a></li>
+      <li> <a id="disablevideo" class="ripple" title = "Disable Video"><i class="fas fa-video-slash fa-sm" id="disableVideoicon"></i> </a> </li>
+      <li> <a id="mute" class="ripple" title = "Disable Audio"> <i class="fas fa-microphone-slash fa-sm" id="muteicon"></i> </a> </li>
       <!-- <li> <a id="sharescreen" class="ripple"> <i class="fas fa-desktop fa-sm"></i> </a> </li> -->
-      <li> <a id="hangup" class="ripple" data-target="#disconnectModal" data-toggle="modal"> <i class="fas fa-phone-slash fa-sm"></i> </a> </li>
-      <li> <a class="ripple" id="compile" target="_blank" href="https://www.jdoodle.com/online-java-compiler/"> <i
+      <li> <a id="hangup" title = "Disconnect Call" class="ripple" data-target="#disconnectModal" data-toggle="modal"> <i class="fas fa-phone-slash fa-sm"></i> </a> </li>
+      <li> <a class="ripple" id="compile" title = "Compile and Run" target="_blank" href="https://www.jdoodle.com/online-java-compiler/"> <i
             class="fas fa-code fa-sm"></i> </a> </li>
     </ul>
     <div class="menu-bg"></div>
@@ -167,10 +167,6 @@
   <!--Section: Main Content-->
 
   <script type="text/javascript">
-
-// $(document).ready(function(){
-//   $('[data-toggle="tooltip"]').tooltip();
-// });
 
 var favIconUrl = "https://codeground.in/img/fav-logo-icon.png";
 var head = document.getElementsByTagName("head")[0];

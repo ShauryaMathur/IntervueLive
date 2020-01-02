@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", event => {
     client = {};
   let audioenabled = true;
   let disbalevideoenabled = true;
-  let url = "https://interviews.codeground.in";
+  let url = location.protocol + "//" + location.host;
   const axios = require("axios");
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", event => {
   const DetectRTC = require("detectrtc");
   const clipboard = new ClipboardJS(".copy");
   const fullscreen = document.getElementById("fullscreen");
-  const invite = document.getElementById("invite");
+  //const invite = document.getElementById("invite");
   const host_stream = document.getElementById("host_stream");
   const remote_stream = document.getElementById("remote_stream");
   const disableVideo = document.getElementById("disablevideo");
@@ -25,19 +25,14 @@ document.addEventListener("DOMContentLoaded", event => {
   const disableVideoicon = document.getElementById("disableVideoicon");
   const maximize = document.getElementById("maximize");
   const maximizeIcon = document.getElementById("maximizeIcon");
+  // const shareScreen = document.getElementById("sharescreen");
   const remoteStreamVideoBox = document.getElementById(
     "remote-stream-video-box"
   );
   const hangupConfirmationButton = document.getElementById(
     "hangupConfirmationButton"
   );
-  fullscreen.title = "FullScreen";
-  disableVideo.title = "Disable Video";
-  mute.title = "Disable Audio";
-  invite.title = "Invite Candidate";
-  compileAndRun.title = "Compile and Run";
-  // const shareScreen = document.getElementById("sharescreen");
-  hangup.title = "Disconnect Call";
+
   videoStreamMaximizeFlag = true;
 
   if (location.href.indexOf("/candidate/") != -1) {
@@ -46,25 +41,6 @@ document.addEventListener("DOMContentLoaded", event => {
     mute.remove();
     invBtn.remove();
   }
-  //let videoStreamMaximizeFlag = false;
-
-  // self.MonacoEnvironment = {
-  //   getWorkerUrl: function(moduleId, label) {
-  //     if (label === "json") {
-  //       return "/dist/json.worker.bundle.js";
-  //     }
-  //     if (label === "css") {
-  //       return "/dist/css.worker.bundle.js";
-  //     }
-  //     if (label === "html") {
-  //       return "/dist/html.worker.bundle.js";
-  //     }
-  //     if (label === "typescript" || label === "javascript") {
-  //       return "/dist/ts.worker.bundle.js";
-  //     }
-  //     return "/dist/editor.worker.bundle.js";
-  //   }
-  // };
 
   /*  document.addEventListener("visibilitychange",function(){
     if(document.location.href.indexOf('interviewer')===-1){
@@ -94,10 +70,8 @@ document.addEventListener("DOMContentLoaded", event => {
       audio: true
     })
     .then(stream => {
-      //emit new client
       socket.emit("new_client", room);
       localStream = stream;
-      //console.log("screen2 in client", window.stream2);
       host_stream.setAttribute("autoplay", "");
       host_stream.setAttribute("muted", "");
       host_stream.setAttribute("playsinline", "");
@@ -137,7 +111,6 @@ document.addEventListener("DOMContentLoaded", event => {
       const make_peer = () => {
         client.gotAnswer = false;
         let peer = init_peer("init");
-        //console.log("I am the creator");
         peer.on("signal", data => {
           if (!client.gotAnswer) {
             socket.emit("offer", room, data);
@@ -171,7 +144,6 @@ document.addEventListener("DOMContentLoaded", event => {
       //handle destroy peer
       const remove_peer = () => {
         remote_stream.remove();
-        // socket.emit
         window.location.href = "/";
         if (client.peer) {
           client.peer.destroy();
@@ -181,17 +153,11 @@ document.addEventListener("DOMContentLoaded", event => {
       //hangup
       hangupConfirmationButton.addEventListener("click", () => {
         socket.emit("user_disconnected", room);
-        //console.log(`ROOOM:::${room}`)
-        //remove_peer();
-        //console.log('Click');
-
         axios
           .get("/disconnect/" + room)
-          .then(function(res) {
-            //console.log(res);
-          })
+          .then(function(res) {})
           .catch(function(err) {
-            //console.log(err);
+            console.log(err);
           });
         remove_peer();
       });
@@ -208,16 +174,14 @@ document.addEventListener("DOMContentLoaded", event => {
             muteicon.className = "fas fa-microphone-slash fa-sm";
             mute.title = "Disable Audio";
           }
-
           audioenabled = !audioenabled;
         }
       });
 
       //goto FullScreen
-      fullscreen.addEventListener("click", () => {
-        document.documentElement.requestFullscreen();
-        //console.log('done');
-      });
+      fullscreen.addEventListener("click", () =>
+        document.documentElement.requestFullscreen()
+      );
 
       //disable video
       disableVideo.addEventListener("click", () => {
@@ -237,20 +201,17 @@ document.addEventListener("DOMContentLoaded", event => {
 
       //maximise stream window
       maximize.addEventListener("click", () => {
-        
-
         if (videoStreamMaximizeFlag) {
           remoteStreamVideoBox.className = "video-box2 maximized-stream";
-          maximizeIcon.className="fa fa-window-minimize";
-          videoStreamMaximizeFlag=false;
-
-        }else{
-          console.log('here');
+          maximizeIcon.className = "fa fa-window-minimize";
+          maximize.title = "Minimise Window";
+          videoStreamMaximizeFlag = false;
+        } else {
           remoteStreamVideoBox.classList.remove("maximized-stream");
-          maximizeIcon.className="fa fa-window-maximize";
-          videoStreamMaximizeFlag=true;
+          maximizeIcon.className = "fa fa-window-maximize";
+          maximize.title = "Maximise Window";
+          videoStreamMaximizeFlag = true;
         }
-        
       });
 
       //invite url
@@ -274,10 +235,6 @@ document.addEventListener("DOMContentLoaded", event => {
           // old browsers
           host_stream.src = URL.createObjectURL(stream);
         }
-
-        /* if(document.location.href.indexOf('interviewer')>-1)
-          document.location.reload(); */
-        //console.log("Done");
       };
 
       // shareScreen.addEventListener("click", () => {
@@ -313,6 +270,6 @@ document.addEventListener("DOMContentLoaded", event => {
       alert(
         "Cannot get access to your media device! Check logs for more info."
       );
-      //console.log(err);
+      console.log(err);
     });
 });
