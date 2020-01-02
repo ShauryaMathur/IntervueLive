@@ -27,8 +27,10 @@ window.addEventListener("load", () => {
   const ydoc = new Y.Doc();
 
   const provider = new WebsocketProvider(
-    'wss:localhost:5000',
-    (location.href.indexOf('/interviewer')!=-1)?location.href.split("/")[5].toString():location.href.split("/")[4].toString(),
+    "wss:localhost:5000",
+    location.href.indexOf("/interviewer") != -1
+      ? location.href.split("/")[5].toString()
+      : location.href.split("/")[4].toString(),
     ydoc
   );
   console.log(provider);
@@ -40,9 +42,9 @@ window.addEventListener("load", () => {
       value: "",
       theme: "vs-dark",
       automaticLayout: true,
-      language:"java",
-      formatOnType:false,
-      formatOnPaste:false
+      language: "java",
+      formatOnType: false,
+      formatOnPaste: false
     }
   );
   const monacoBinding = new MonacoBinding(

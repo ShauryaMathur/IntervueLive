@@ -1,21 +1,16 @@
 const express = require("express");
-var ReverseMd5 = require('reverse-md5');
-const fs = require('fs');
+const fs = require("fs");
 const cors = require("cors");
 const app = express();
 const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
+  key: fs.readFileSync("key.pem"),
+  cert: fs.readFileSync("cert.pem")
 };
-const server = require("https").Server(options,app);
-const crypto = require('crypto')
+const server = require("https").Server(options, app);
+const crypto = require("crypto");
 
-const server6 = require("https").Server(options,app);
+const server6 = require("https").Server(options, app);
 const WebSocket = require("ws");
-
-
-
-//const http = require("http");
 
 //const StaticServer = require('node-static').Server
 const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
@@ -26,16 +21,7 @@ const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
 const io = require("socket.io")(server);
 //const PORT = process.env.PORT || 5000;
 
-var reverseMd5 = ReverseMd5({
-	lettersUpper: true,
-	lettersLower: true,
-	numbers: true,
-	special: false,
-	whitespace: true,
-	maxLen: 12
-});
-
-app.use(cors({origin:'https://codegrounds.co.in',credentials:true}));
+app.use(cors({ origin: "https://codegrounds.co.in", credentials: true }));
 
 //middleware
 app.set("views", "./views");
@@ -48,82 +34,51 @@ const rooms = {};
 
 //@route -> createroom[post]
 app.get("/createroom/:roomname", (req, res) => {
-  console.log('hi');
+  //console.log('hi');
 
   if (rooms[req.params.roomname] != null) {
     return res.render("roomalreadyexists");
   }
 
-
-  
   rooms[req.params.roomname] = { users: {} };
-  console.log("In",rooms);
+  //console.log("In",rooms);
   //res.redirect(`/interviewer/${req.params.roomname}`);
   res.status(200);
   io.emit("room_created", req.params.roomname);
 });
 
 //@route -> For Diconnecting Interview
-app.get("/disconnect/:roomname",(req,res)=>{
-  var key=req.params.roomname;
+app.get("/disconnect/:roomname", (req, res) => {
+  var key = req.params.roomname;
   delete rooms[key];
-})
+});
 
 //@route -> index
 app.get("/", (req, res) => {
   res.render("index", { rooms: rooms });
 });
 
-/* const server2 = http.createServer((request, response) => {
-  request.addListener('end', () => {
-    staticServer.serve(request, response)
-  }).resume()
-}) */
-
 //@route -> room
 //To create Interviewer Room
 app.get("/interviewer/:token/:room", (req, res) => {
   var salt = "DevelopedByManojAndShaurya";
-  var text=req.params.room+salt;
-  // var url = 'http://localhost:8080/ajax/ats/encrypt/'+text;
-  var hash = crypto.createHash('md5').update(req.params.room+salt).digest("hex");
-//   http.get(url, (resp) => {
-//   let data = '';
-//   // A chunk of data has been recieved.
-//   resp.on('data', (chunk) => {
-//     data += chunk;
-//   });
-
-//   // The whole response has been received. Print out the result.
-//   resp.on('end', () => {
-//     // console.log(JSON.parse(data).explanation);
-//     hash = data;
-//     console.log(hash,"yaha \n\n\n\n");
-//   });
-
-// }).on("error", (err) => {
-//   console.log("Error: " + err.message);
-// });
-  // console.log(req.params,"\n\n\nvdvfd");
-  // var hash = ;
-  console.log('hash',hash,"   ",);
-  if (rooms[req.params.room] != null) {
-    return res.render("roomalreadyexists");
-  }
-  rooms[req.params.room] = { users: {} };
-  console.log("In",rooms);
-  //res.redirect(`/interviewer/${req.params.roomname}`);
-  //res.status(200);
-  io.emit("room_created", req.params.room);
-
-  if (rooms[req.params.room] == null || hash.toLowerCase()!==req.params.token.toLowerCase()) {
-    console.log('4','Here');
+  var hash = crypto
+    .createHash("md5")
+    .update(req.params.room + salt)
+    .digest("hex");
+  if (hash.toLowerCase() !== req.params.token.toLowerCase()) {
+    //console.log("1", "encryption mismatch");
     return res.render("roomdoesnotexist");
   }
-  console.log('ab');
+  if (rooms[req.params.room] != null) {
+    //console.log("2", "room already there", rooms);
+    return res.render("room", { room_name: req.params.room });
+  }
+  rooms[req.params.room] = { users: {} };
+  io.emit("room_created", req.params.room);
+  //console.log("3", "new room created");
   return res.render("room", { room_name: req.params.room });
 });
-
 //Create Interviewee Room
 app.get("/candidate/:room", (req, res) => {
   if (rooms[req.params.room] == null) {
@@ -132,23 +87,13 @@ app.get("/candidate/:room", (req, res) => {
   res.render("room", { room_name: req.params.room });
 });
 
-// app.get('/app1socket',()=> {
-//   proxy_pass http://127.0.0.1:3000/socket.io/;
-//   proxy_http_version 1.1;
-//   proxy_set_header Upgrade $http_upgrade;
-//   proxy_set_header Connection "upgrade";
-//   proxy_set_header Host $host;
-//   proxy_cache_bypass $http_upgrade;
-// }) ;
-
-app.get('*',(req,res)=>{
+app.get("*", (req, res) => {
   res.render("index", { rooms: rooms });
 });
 
 //socket connection established
 io.on("connection", socket => {
-  console.log('here');
-  console.log('Socket Started');
+  //console.log('Socket Started');
   socket.on("new_client", room => {
     io.in(room).clients(function(error, clients) {
       if (error) {
@@ -184,26 +129,17 @@ io.on("connection", socket => {
   socket.on("user_disconnected", disconnect);
 });
 
-/* app.use(function(req, res, next) {
-  res.status(404);
-  res.send("404");
-}); */
-
-/* server2.listen(port, () => {
-  console.log(`Server for wbsocket started on PORT --> ${PORT}`);
-}); */
-
-server.listen(443,() => {
-    console.log('Video server listening on port: 443');
+server.listen(443, () => {
+  //console.log('Video server listening on port: 443');
 });
 
 server6.listen(5000, function() {
-  console.log('Site and CollabEditor server listening on port: 5000');
-}); 
-const wss = new WebSocket.Server({ server:server6 });
-console.log("hello\n\n", process.env.PORT,"hello\n\n");
+  //console.log('Site and CollabEditor server listening on port: 5000');
+});
+const wss = new WebSocket.Server({ server: server6 });
+//console.log("hello\n\n", process.env.PORT,"hello\n\n");
 wss.on("connection", (conn, req) =>
   setupWSConnection(conn, req, {
     gc: req.url.slice(1) !== "prosemirror-versions"
   })
-);  
+);

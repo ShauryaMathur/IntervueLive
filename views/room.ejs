@@ -44,7 +44,7 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4"
                       aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
                       <div style="margin-left: 25%;"><h4 style="color: aliceblue;
-                        font-weight: 700;">CG Live Interview Tool</h4></div>
+                        font-weight: 700;">Live Interview</h4></div>
   <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
     <ul class="navbar-nav ml-auto">
       <!-- <li class="nav-item active"> <a class="nav-link" href="#"> <i class="fas fa-cogs"></i> Settings </a> </li> -->
@@ -81,6 +81,37 @@
   </div>
 <!--./Modal-->
 
+<!-- Terminate Interview Modal -->
+<div class="modal fade hide " id="disconnectModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="padding:0.5em;">
+      <div class="modal-body">
+        Are you sure you want to end the Interview?
+      </div>
+        <div class="modal-footer" style="height:50px;">
+          <button type="button" data-dismiss="modal" class="btn btn-primary" id="hangupConfirmationButton" style="height: 30px;
+          padding: 0.5em;">End Interview</button>
+          <button type="button" data-dismiss="modal" class="btn" style="color: black;height: 30px;
+          padding: 0.5em;">Continue</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!--./Terminate Interview Modal-->
+
+<!-- Terminate Interview Modal -->
+<!-- <div class="modal hide fade" id="disconnectModal" tabindex="-1" >
+  <div class="modal-body">
+    Are you sure you want to end the Interview?
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn btn-primary" id="hangupConfirmationButton">End Interview</button>
+    <button type="button" data-dismiss="modal" class="btn">Continue</button>
+  </div>
+</div> -->
+<!--./Terminate Interview Modal-->
+
 <div class="container-fluid"> 
     <!--Section: Main Content-->
     <section>
@@ -89,7 +120,7 @@
         <!--Grid column-->
         <div class="col-md-12 mb-4 mb-md-0">
           <div class="card code-share">
-            <div class="card-body">
+            <div class="card-body" style="padding:0.5rem !important">
               <div class="row">
                 <div class="col-md-2"><select class="form-control" onchange="changeLanguage()" id="language">
                     <option value="java">Java</option>
@@ -112,7 +143,6 @@
                 </div>
               </div>
             </div>
-            <!-- <a id="compile" class="btn btn-cyan" target="_blank" href="https://www.jdoodle.com/online-java-compiler/">Compile and Run</a>  -->
           </div>
         </div>
       </div>
@@ -133,13 +163,13 @@
   <!--Floating Menu-->
   <nav class="floating-menu">
     <ul class="main-menu">
-      <li> <a id="invite" class="ripple" data-target="#inviteModal" data-toggle="modal" title="Invite Candidate"> <i class="fas fa-envelope fa-sm"></i> </a> </li>
-      <li><a class="ripple" id="fullscreen" data-toggle="tooltip" title="FullScreen"><i class="fas fa-expand"></i></a></li>
-      <li> <a id="disablevideo" class="ripple" data-toggle="tooltip" title="Disbale Video"><i class="fas fa-video-slash fa-sm" id="disableVideoicon"></i> </a> </li>
-      <li> <a id="mute" class="ripple" data-toggle="tooltip" title="Mute Audio"> <i class="fas fa-microphone-slash fa-sm" id="muteicon"></i> </a> </li>
+      <li> <a id="invite" class="ripple" data-target="#inviteModal" data-toggle="modal"> <i class="fas fa-envelope fa-sm"></i> </a> </li>
+      <li><a class="ripple" id="fullscreen" ><i class="fas fa-expand"></i></a></li>
+      <li> <a id="disablevideo" class="ripple"><i class="fas fa-video-slash fa-sm" id="disableVideoicon"></i> </a> </li>
+      <li> <a id="mute" class="ripple" > <i class="fas fa-microphone-slash fa-sm" id="muteicon"></i> </a> </li>
       <!-- <li> <a id="sharescreen" class="ripple"> <i class="fas fa-desktop fa-sm"></i> </a> </li> -->
-      <li> <a id="hangup" class="ripple"  data-toggle="tooltip" title="Disconnect Call"> <i class="fas fa-phone-slash fa-sm"></i> </a> </li>
-      <li> <a class="ripple" id="compile" target="_blank" href="https://www.jdoodle.com/online-java-compiler/" data-toggle="tooltip" title="Compile and Run"> <i
+      <li> <a id="hangup" class="ripple" data-target="#disconnectModal" data-toggle="modal"> <i class="fas fa-phone-slash fa-sm"></i> </a> </li>
+      <li> <a class="ripple" id="compile" target="_blank" href="https://www.jdoodle.com/online-java-compiler/"> <i
             class="fas fa-code fa-sm"></i> </a> </li>
     </ul>
     <div class="menu-bg"></div>
@@ -150,9 +180,9 @@
 
   <script type="text/javascript">
 
-$(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip();
-});
+// $(document).ready(function(){
+//   $('[data-toggle="tooltip"]').tooltip();
+// });
 
 var favIconUrl = "https://codeground.in/img/fav-logo-icon.png";
 var head = document.getElementsByTagName("head")[0];
@@ -182,20 +212,17 @@ function changeLanguage(){
     ,"cpp":'https://www.jdoodle.com/online-compiler-c++17/'
     ,"csharp":'https://www.jdoodle.com/compile-c-sharp-online/'}
     var language = document.getElementById('language').value;
-    console.log(language);
+    //console.log(language);
     monaco.editor.setModelLanguage(window.editor.getModel(), language);
     document.getElementById("compile").setAttribute("href",compilerLinksMap[language]);
-    console.log(document.getElementById("compile").href);
+    //console.log(document.getElementById("compile").href);
   }
   function changeTheme(){
     var theme = document.getElementById('theme').value;
     monaco.editor.setTheme(theme);
   }
   </script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
-
-
 </body>
 
 </html>

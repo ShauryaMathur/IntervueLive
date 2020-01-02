@@ -1,64 +1,71 @@
-
-
-
 document.addEventListener("DOMContentLoaded", event => {
-  
   let localStream,
     client = {};
-
-   
-  //var compilerLinksMap={"ava":}
   let audioenabled = true;
   let disbalevideoenabled = true;
   let url = "https://localhost";
-  const axios = require('axios');
+  const axios = require("axios");
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
   const socket = io(`${url}`);
   const DetectRTC = require("detectrtc");
   const clipboard = new ClipboardJS(".copy");
-  const fullscreen=document.getElementById('fullscreen');
+  const fullscreen = document.getElementById("fullscreen");
+  const invite = document.getElementById("invite");
   const host_stream = document.getElementById("host_stream");
   const remote_stream = document.getElementById("remote_stream");
   const disableVideo = document.getElementById("disablevideo");
- // const shareScreen = document.getElementById("sharescreen");
+  const compileAndRun = document.getElementById("compile");
   const mute = document.getElementById("mute");
   const hangup = document.getElementById("hangup");
   const invBtn = document.getElementById("invite");
-  if(location.href.indexOf('/candidate/')!=-1){
+  const link = document.getElementById("link");
+  const waiting = document.getElementById("waiting");
+  const muteicon = document.getElementById("muteicon");
+  const disableVideoicon = document.getElementById("disableVideoicon");
+  const maximize = document.getElementById("maximize");
+  const remoteStreamVideoBox = document.getElementById(
+    "remote-stream-video-box"
+  );
+  const hangupConfirmationButton = document.getElementById(
+    "hangupConfirmationButton"
+  );
+  const minimize = document.getElementById("minimize");
+  fullscreen.title = "FullScreen";
+  disableVideo.title = "Disable Video";
+  mute.title = "Disable Audio";
+  invite.title = "Invite Candidate";
+  compileAndRun.title = "Compile and Run";
+  // const shareScreen = document.getElementById("sharescreen");
+  hangup.title = "Disconnect Call";
+
+  if (location.href.indexOf("/candidate/") != -1) {
     hangup.remove();
     disableVideo.remove();
     mute.remove();
     invBtn.remove();
   }
-  const link = document.getElementById("link");
-  const waiting = document.getElementById("waiting");
-  const muteicon = document.getElementById("muteicon");
-  const disableVideoicon = document.getElementById("disableVideoicon");
-  const maximize=document.getElementById("maximize");
-  const remoteStreamVideoBox=document.getElementById("remote-stream-video-box");
-  const minimize=document.getElementById("minimize");
   let videoStreamMaximizeFlag = false;
 
-  self.MonacoEnvironment = {
-    getWorkerUrl: function(moduleId, label) {
-      if (label === "json") {
-        return "/dist/json.worker.bundle.js";
-      }
-      if (label === "css") {
-        return "/dist/css.worker.bundle.js";
-      }
-      if (label === "html") {
-        return "/dist/html.worker.bundle.js";
-      }
-      if (label === "typescript" || label === "javascript") {
-        return "/dist/ts.worker.bundle.js";
-      }
-      return "/dist/editor.worker.bundle.js";
-    }
-  };
+  // self.MonacoEnvironment = {
+  //   getWorkerUrl: function(moduleId, label) {
+  //     if (label === "json") {
+  //       return "/dist/json.worker.bundle.js";
+  //     }
+  //     if (label === "css") {
+  //       return "/dist/css.worker.bundle.js";
+  //     }
+  //     if (label === "html") {
+  //       return "/dist/html.worker.bundle.js";
+  //     }
+  //     if (label === "typescript" || label === "javascript") {
+  //       return "/dist/ts.worker.bundle.js";
+  //     }
+  //     return "/dist/editor.worker.bundle.js";
+  //   }
+  // };
 
- /*  document.addEventListener("visibilitychange",function(){
+  /*  document.addEventListener("visibilitychange",function(){
     if(document.location.href.indexOf('interviewer')===-1){
       confirm("Do NOT switch tabs!");
 
@@ -129,7 +136,7 @@ document.addEventListener("DOMContentLoaded", event => {
       const make_peer = () => {
         client.gotAnswer = false;
         let peer = init_peer("init");
-        console.log("I am the creator");
+        //console.log("I am the creator");
         peer.on("signal", data => {
           if (!client.gotAnswer) {
             socket.emit("offer", room, data);
@@ -171,19 +178,21 @@ document.addEventListener("DOMContentLoaded", event => {
       };
 
       //hangup
-      hangup.addEventListener("click", () => {
+      hangupConfirmationButton.addEventListener("click", () => {
         socket.emit("user_disconnected", room);
         //console.log(`ROOOM:::${room}`)
         //remove_peer();
-        console.log('Click');
+        //console.log('Click');
 
-        axios.get('/disconnect/'+room)
-        .then(function(res){
-          console.log(res);
-        })
-        .catch(function(err){console.log(err);})
+        axios
+          .get("/disconnect/" + room)
+          .then(function(res) {
+            //console.log(res);
+          })
+          .catch(function(err) {
+            //console.log(err);
+          });
         remove_peer();
-
       });
 
       //mute audio
@@ -191,56 +200,67 @@ document.addEventListener("DOMContentLoaded", event => {
         let audioTracks = localStream.getAudioTracks();
         for (var i = 0; i < audioTracks.length; ++i) {
           audioTracks[i].enabled = !audioTracks[i].enabled;
-          if (audioenabled) muteicon.className = "fas fa-microphone fa-sm";
-          else muteicon.className = "fas fa-microphone-slash fa-sm";
+          if (audioenabled) {
+            muteicon.className = "fas fa-microphone fa-sm";
+            mute.title = "Enable Audio";
+          } else {
+            muteicon.className = "fas fa-microphone-slash fa-sm";
+            mute.title = "Disable Audio";
+          }
 
           audioenabled = !audioenabled;
         }
       });
 
       //goto FullScreen
-      fullscreen.addEventListener('click',()=>{document.documentElement.requestFullscreen();console.log('done');});
+      fullscreen.addEventListener("click", () => {
+        document.documentElement.requestFullscreen();
+        //console.log('done');
+      });
 
       //disable video
       disableVideo.addEventListener("click", () => {
         videoTracks = localStream.getVideoTracks();
         for (var i = 0; i < videoTracks.length; ++i) {
           videoTracks[i].enabled = !videoTracks[i].enabled;
-          if (disbalevideoenabled) disableVideoicon.className = "fas fa-video fa-sm";
-          else disableVideoicon.className = "fas fa-video-slash fa-sm";
-
+          if (disbalevideoenabled) {
+            disableVideoicon.className = "fas fa-video fa-sm";
+            disableVideo.title = "Enable Video";
+          } else {
+            disableVideoicon.className = "fas fa-video-slash fa-sm";
+            disableVideo.title = "Disable Video";
+          }
           disbalevideoenabled = !disbalevideoenabled;
         }
       });
 
       //maximise stream window
-      maximize.addEventListener("click",()=>{
+      maximize.addEventListener("click", () => {
+        videoStreamMaximizeFlag = true;
 
-        videoStreamMaximizeFlag=true;
-
-        if(videoStreamMaximizeFlag){
-          remoteStreamVideoBox.className="video-box2 maximized-stream";
+        if (videoStreamMaximizeFlag) {
+          remoteStreamVideoBox.className = "video-box2 maximized-stream";
         }
       });
 
       //Minimize stream window
-      minimize.addEventListener('click',()=>{
-        
-        videoStreamMaximizeFlag=false;
-        if(!videoStreamMaximizeFlag)
+      minimize.addEventListener("click", () => {
+        videoStreamMaximizeFlag = false;
+        if (!videoStreamMaximizeFlag)
           remoteStreamVideoBox.classList.remove("maximized-stream");
       });
 
       //invite url
       function getUrl() {
-        let url = window.location.href.replace('interviewer','candidate').replace(window.location.href.split('/')[4]+'/','');
+        let url = window.location.href
+          .replace("interviewer", "candidate")
+          .replace(window.location.href.split("/")[4] + "/", "");
         link.value = url;
       }
 
       invBtn.addEventListener("click", getUrl());
 
       addMedia = stream => {
-        
         host_stream.setAttribute("autoplay", "");
         host_stream.setAttribute("muted", "");
         host_stream.setAttribute("playsinline", "");
@@ -251,14 +271,14 @@ document.addEventListener("DOMContentLoaded", event => {
           // old browsers
           host_stream.src = URL.createObjectURL(stream);
         }
-        
+
         /* if(document.location.href.indexOf('interviewer')>-1)
           document.location.reload(); */
-        console.log("Done");
+        //console.log("Done");
       };
 
       // shareScreen.addEventListener("click", () => {
-        
+
       //   client.peer.removeStream(localStream);
 
       //   navigator.mediaDevices
@@ -276,7 +296,7 @@ document.addEventListener("DOMContentLoaded", event => {
       //       // client.peer.signal();
       //       // addMedia(stream);
       //     })
-      //     .catch(err => console.log(err));
+      //     .catch(err => //console.log(err));
       // });
 
       //events
@@ -290,6 +310,6 @@ document.addEventListener("DOMContentLoaded", event => {
       alert(
         "Cannot get access to your media device! Check logs for more info."
       );
-      console.log(err);
+      //console.log(err);
     });
 });

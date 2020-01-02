@@ -9,7 +9,7 @@
     "mini": " cd public/js && browserify jquery.min.js client.js -o bundle.js",
     "dev": " npm run mini && nodemon ./index",
     "sim": "concurrently \"nodemon ./index\" \"watchify public/js/jquery.min.js public/js/client.js -o public/js/bundle.js -v\"",
-    "start":"node ./index.js "
+    "start": "node ./index.js "
   },
   "dependencies": {
     "@atlaskit/editor-core": "^113.1.0",
@@ -34,7 +34,6 @@
     "mime": "^2.4.4",
     "monaco-editor": "^0.17.1",
     "node-static": "^0.7.11",
-    "nodemon": "^1.19.3",
     "prosemirror-example-setup": "^1.0.1",
     "prosemirror-model": "^1.7.1",
     "prosemirror-state": "^1.2.4",
@@ -66,6 +65,7 @@
     "concurrently": "^5.0.2",
     "css-loader": "^3.2.0",
     "style-loader": "^1.0.0",
+    "nodemon": "^1.19.3",
     "watchify": "^3.11.1",
     "webpack-cli": "^3.3.9"
   }
