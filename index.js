@@ -1,11 +1,21 @@
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
+const path=require('path');
+const http=require('http');
 const app = express();
+
+const privateKey = fs.readFileSync('privkey.pem', 'utf8');
+const certificate = fs.readFileSync('cert.pem', 'utf8');
+const ca = fs.readFileSync('chain.pem', 'utf8');
+
 const options = {
-  key: fs.readFileSync("key.pem"),
-  cert: fs.readFileSync("cert.pem")
-};
+  key: privateKey,
+  cert: certificate,
+  ca: ca
+  };
+
+const httpServer=http.createServer(app);
 const videoServer = require("https").Server(options, app);
 const crypto = require("crypto");
 const collabEditServer = require("https").Server(options, app);
@@ -13,12 +23,14 @@ const WebSocket = require("ws");
 const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
 const io = require("socket.io")(videoServer);
 
-app.use(cors({ origin: "https://codegrounds.co.in", credentials: true }));
+app.use(cors({ origin: "https://live2.codegrounds.co.in", credentials: true }));
+
 
 //middleware
 app.set("views", "./views");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+//app.use(express.static(__dirname, { dotfiles: 'allow' } ));
 app.use(express.urlencoded({ extended: true }));
 
 const rooms = {};
@@ -114,14 +126,17 @@ io.on("connection", socket => {
   socket.on("user_disconnected", disconnect);
 });
 
-videoServer.listen(443, () => {
-  console.log("videoServer listening on port: 443");
+videoServer.listen(5000, () => {
+  console.log("videoServer listening on port: 5000");
 });
 
-collabEditServer.listen(5000, function() {
-  console.log("collabEditServer listening on port: 5000");
+collabEditServer.listen(443, function() {
+  console.log("collabEditServer listening on port: 443");
 });
 
+httpServer.listen(80,()=>{
+  console.log('HTTP Server Listening on port : 80');
+})
 const wss = new WebSocket.Server({ server: collabEditServer });
 
 wss.on("connection", (conn, req) =>
