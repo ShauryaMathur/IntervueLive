@@ -168,10 +168,10 @@ document.addEventListener("DOMContentLoaded", event => {
         for (var i = 0; i < audioTracks.length; ++i) {
           audioTracks[i].enabled = !audioTracks[i].enabled;
           if (audioenabled) {
-            muteicon.className = "fas fa-microphone fa-sm";
+            muteicon.className = "fas fa-microphone-slash fa-sm";
             mute.title = "Enable Audio";
           } else {
-            muteicon.className = "fas fa-microphone-slash fa-sm";
+            muteicon.className = "fas fa-microphone fa-sm";
             mute.title = "Disable Audio";
           }
           audioenabled = !audioenabled;
@@ -189,10 +189,10 @@ document.addEventListener("DOMContentLoaded", event => {
         for (var i = 0; i < videoTracks.length; ++i) {
           videoTracks[i].enabled = !videoTracks[i].enabled;
           if (disbalevideoenabled) {
-            disableVideoicon.className = "fas fa-video fa-sm";
+            disableVideoicon.className = "fas fa-video-slash fa-sm";
             disableVideo.title = "Enable Video";
           } else {
-            disableVideoicon.className = "fas fa-video-slash fa-sm";
+            disableVideoicon.className = "fas fa-video fa-sm";
             disableVideo.title = "Disable Video";
           }
           disbalevideoenabled = !disbalevideoenabled;
