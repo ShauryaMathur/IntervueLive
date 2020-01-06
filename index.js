@@ -12,33 +12,31 @@ const opts = {
 const debug = require('simple-node-logger').createRollingFileLogger(opts);
 const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
 const app = express();
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/chain.pem', 'utf8');
+
 const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem'),
-  ca:''
+    key: privateKey,
+    cert: certificate,
+    ca: ca
 };
 
-if(process.env.NODE_ENV==='production'){
-  try {
-    options.key= fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/privkey.pem', 'utf8');
-    options.cert =fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/cert.pem', 'utf8');
-    options.ca = fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/chain.pem', 'utf8');
-  } catch (err) {
-    debug.error(`Error loading SSL certificates` + err);
-  }
-}
-
+const httpServer = http.createServer(app);
 const videoServer = require("https").Server(options, app);
 const collabEditServer = require("https").Server(options, app);
 const io = require("socket.io")(videoServer);
 
-app.use(cors({ origin: "https://live2.codegrounds.co.in", credentials: true }));
+app.use(cors({origin: "https://live2.codegrounds.co.in", credentials: true}));
 
-//middleware
+
+// middleware
 app.set("views", "./views");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.static(__dirname, { dotfiles: 'allow' } ));
+app.use(express.urlencoded({extended: true}));
 
 const rooms = {};
 
