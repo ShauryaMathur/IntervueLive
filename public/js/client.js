@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", event => {
     client = {};
   let audioenabled = true;
   let disbalevideoenabled = true;
-  let url = location.protocol + "//" + location.host+':5000';
+  let url = location.protocol + "//" + location.hostname+':4000';
+  console.log(url);
+  
   const axios = require("axios");
   const Peer = require("simple-peer");
   const io = require("socket.io-client");
@@ -63,13 +65,16 @@ document.addEventListener("DOMContentLoaded", event => {
   if (DetectRTC.osName === "iOS" && DetectRTC.browser === "Chrome") {
     alert("Browser not supported! Please use Safari");
   }
-
+  console.log('DOM2');
+  
   navigator.mediaDevices
     .getUserMedia({
       video: true,
       audio: true
     })
     .then(stream => {
+      console.log('New client');
+      
       socket.emit("new_client", room);
       localStream = stream;
       host_stream.setAttribute("autoplay", "");
@@ -88,7 +93,19 @@ document.addEventListener("DOMContentLoaded", event => {
         let peer = new Peer({
           initiator: type == "init" ? true : false,
           stream: localStream,
-          trickle: false
+          trickle: false,
+          config: {
+            iceServers: [
+              {
+                urls: "stun:global.stun.twilio.com:3478" // Correct STUN server URL
+              },
+              {
+                urls: "turn:your.turn.server:3478", // Replace with your TURN server details
+                username: "yourUsername", // Replace with your TURN server username
+                credential: "yourPassword" // Replace with your TURN server password
+              }
+            ]
+          }
         });
         peer.on("stream", stream => {
           waiting.setAttribute("hidden", "");
