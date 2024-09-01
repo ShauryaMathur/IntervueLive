@@ -5,7 +5,9 @@
    
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>CG Interview Tool</title>
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://cdnjs.cloudflare.com;"> -->
+
+  <title>IntervueLive</title>
 
   
 <!-- Bootstrap core CSS -->
@@ -32,19 +34,22 @@
 </script>
   
 <!-- Custom JS-->
+<!-- <script src="/socket.io/socket.io.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 <script src="/dist/monaco.bundle.js" type="text/javascript" defer></script>
 <script src="/js/bundle.js" type="text/javascript"  defer></script>
+<script src="/js/room.js" type="text/javascript" defer></script>
      
 </head>
 
 <body>
 
 <!--Header Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-dark cyan"> <span><a href="#"><img src="/img/logo.png"></a></span><span><a class="navbar-brand" href="#"><img src="/img/logo-light-text.png" ></a></span>
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark cyan"> <span><a href="#"><img src="/img/logo.png" alt="Logo" loading="lazy"></a></span><span><a class="navbar-brand" href="#"><img src="/img/logo-light-text.png" ></a></span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4"
                       aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
                       <div style="margin-left: 25%;"><h4 style="color: aliceblue;
-                        font-weight: 700;">Live Interview</h4></div>
+                        font-weight: 700;">IntervueLive</h4></div>
   <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
     <ul class="navbar-nav ml-auto">
       <!-- <li class="nav-item active"> <a class="nav-link" href="#"> <i class="fas fa-cogs"></i> Settings </a> </li> -->
@@ -146,6 +151,9 @@
           class="fa fa-window-maximize"></i></button>
     </div>
     <p id="waiting">Waiting for someone to join...</p>
+    <!-- <div id="loading" style="display:none;">
+      <i class="fa fa-spinner fa-spin"></i> Loading...
+    </div> -->
     <video id="remote_stream" class="img-fluid" playsinline></video>
   </div>
   <!--Floating Menu-->
@@ -176,35 +184,7 @@ var favLink = document.createElement("link");
         favLink.setAttribute("type", "image/x-icon");
         head.appendChild(favLink);
   
-function openNav() {
-  document.getElementById("actionbar").style.width = "40%";
-  document.getElementById("settings").style.display="none";
-}
-function closeNav() {
-  document.getElementById("actionbar").style.width = "0";
-  document.getElementById("settings").style.display="block";
-}
-document.addEventListener("beforeunload",(e)=>{return null;});
 
-function changeLanguage(){
-  var compilerLinksMap={"java":'https://www.jdoodle.com/online-java-compiler/',
-    "javascript":'https://www.jdoodle.com/execute-nodejs-online/'
-    ,"python":'https://www.jdoodle.com/python3-programming-online/'
-    ,"mysql":'https://www.jdoodle.com/execute-sql-online/'
-    ,"php":'https://www.jdoodle.com/php-online-editor/'
-    ,"r":'https://www.jdoodle.com/execute-r-online/'
-    ,"cpp":'https://www.jdoodle.com/online-compiler-c++17/'
-    ,"csharp":'https://www.jdoodle.com/compile-c-sharp-online/'}
-    var language = document.getElementById('language').value;
-    //console.log(language);
-    monaco.editor.setModelLanguage(window.editor.getModel(), language);
-    document.getElementById("compile").setAttribute("href",compilerLinksMap[language]);
-    //console.log(document.getElementById("compile").href);
-  }
-  function changeTheme(){
-    var theme = document.getElementById('theme').value;
-    monaco.editor.setTheme(theme);
-  }
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
 </body>

@@ -10,14 +10,14 @@ const { log } = require("console");
 
 //Logging
 const loggingOptions = {
-      logDirectory:path.join(__dirname,'/logs'),
-      fileNamePattern:'<DATE>.log',
-      dateFormat:'YYYY.MM.DD'
+  logDirectory: path.join(__dirname, '/logs'),
+  fileNamePattern: '<DATE>.log',
+  dateFormat: 'YYYY.MM.DD'
 };
 const debug = require('simple-node-logger').createRollingFileLogger(loggingOptions);
 
 //Editor Config
-const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
+const setupWSConnection = require("y-websocket/bin/utils").setupWSConnection;
 
 
 
@@ -33,21 +33,21 @@ const setupWSConnection = require("y-websocket/bin/utils.js").setupWSConnection;
 
 //Initialise Express App
 const app = express();
-
 const httpServer = http.createServer(app);
-const videoServer = require("http").Server(app);
-const collabEditServer = require("http").Server(app);
-const io = require("socket.io")(videoServer);
+const io = require("socket.io")(httpServer, {
+  transports: ['websocket','polling'] // Ensure WebSocket transport is used
+});
 
-app.use(cors({origin: "https://live2.codegrounds.co.in", credentials: true}));
+// const videoServer = require("http").Server(app);
+// const collabEditServer = require("http").Server(app);
 
-
-// middleware
+//Middleware
+app.use(cors({ origin: "https://live2.codegrounds.co.in", credentials: true }));
 app.set("views", "./views");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(__dirname, { dotfiles: 'allow' } ));
-app.use(express.urlencoded({extended: true}));
 
 //Room Config
 const rooms = {};
@@ -85,9 +85,9 @@ app.get("/interviewer/:token/:room", (req, res) => {
   //   debug.error(`Invalid Hash : ${hash} for room : ${req.params.room}`);
   //   return res.render("roomdoesnotexist");
   // }
-  
+
   if (rooms[req.params.room] == null || rooms[req.params.room] == true) {
-    rooms[req.params.room]=true;
+    rooms[req.params.room] = true;
     debug.info(
       `Room created successfully with token : ${req.params.room} by Interviewer `
     );
@@ -117,75 +117,127 @@ app.get("*", (req, res) => {
   res.render("index", { rooms: rooms });
 });
 
-//socket connection established
-try {
-  io.on("connection", socket => {
-    console.log('Connected');
-    
-    socket.on("new_client", room => {
-      console.log('COnnected3')
-      io.in(room).clients(function(error, clients) {
-        if (error) {
-          debug.error(`Error while creating new client in new room ${room} ` + error);
-          throw error;
-        }
-        if (clients.length >= 2) {
-          debug.error("Trying to join an active Interview room with token " + room );
-          socket.emit("session_active");
-          return;
-        }
-        console.log('Connected2');
-        socket.join(room);
+//Socket.io Connection
 
-        if (clients.length < 2) {
-          if (clients.length == 1) {
-            debug.info("Creating Peer for room " + room);
-            socket.emit("create_peer");
-          }
+io.on("connection", socket => {
+  socket.on("new_client", room => {
+    console.log('COnnected3')
+    io.in(room).clients(function (error, clients) {
+      if (error) {
+        debug.error(`Error while creating new client in new room ${room} ` + error);
+        throw error;
+      }
+      if (clients.length >= 2) {
+        debug.error("Trying to join an active Interview room with token " + room);
+        socket.emit("session_active");
+        return;
+      }
+      socket.join(room);
+
+      if (clients.length === 1) {
+        if (clients.length == 1) {
+          debug.info(`Creating Peer for room: ${room}`);
+          socket.emit("create_peer");
         }
-      });
+      }
     });
-
-    const send_offer = (room, offer) => {
-      socket.to(room).broadcast.emit("sent_offer", offer);
-    };
-
-    const send_answer = (room, data) => {
-      socket.to(room).broadcast.emit("sent_answer", data);
-    };
-
-    const disconnect = room => {
-      socket.to(room).emit("remove_peer");
-    };
-
-    //events
-    socket.on("offer", send_offer);
-    socket.on("answer", send_answer);
-    socket.on("user_disconnected", disconnect);
   });
-} catch (err) {
-  debug.info("Error connecting Socket" + err);
-}
 
-videoServer.listen(4000, () => {
-  console.log("videoServer listening on port: 4000");
-  debug.info("videoServer listening on port: 4000");
+  socket.on("offer", (room, offer) => {
+    socket.to(room).broadcast.emit("sent_offer", offer);
+  });
+
+  socket.on("answer", (room, data) => {
+    socket.to(room).broadcast.emit("sent_answer", data);
+  });
+
+  socket.on("user_disconnected", (room) => {
+    socket.to(room).emit("remove_peer");
+  });
 });
 
-collabEditServer.listen(8080, function() {
-  console.log("collabEditServer listening on port: 8080");
-  debug.info("collabEditServer listening on port: 8080");
-});
+//Websocket Server
+const wss = new WebSocket.Server({ noServer:true });
 
-const wss = new WebSocket.Server({ server: collabEditServer });
-
-wss.on("connection", (conn, req) => {
-  try {
-    setupWSConnection(conn, req, {
-      gc: req.url.slice(1) !== "prosemirror-versions"
+// Handle WebSocket Upgrade Requests
+httpServer.on('upgrade', (request, socket, head) => {
+  // Handle WebSocket requests for YJS
+  if (request.url.startsWith('/yjs') || request.url.startsWith('/1')) {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit('connection', ws, request);
     });
-    debug.info("YJS Setup successfull for Request " + req.url);
-  } catch (err) {
-    debug.error(`Error setting up YJS` + err);
+  }
+  // Handle other upgrade requests, e.g., for Socket.IO
+  else {
+    // Handle other WebSocket upgrade requests, e.g., for Socket.IO
+    // Note: Socket.IO does not need explicit handling of upgrade
+    // It will automatically handle upgrade requests
+    socket.destroy(); // Close the socket if not handling by YJS
   }
 });
+
+// Handle YJS WebSocket connections
+wss.on('connection', (ws, request) => {
+  try {
+    setupWSConnection(ws, request, {
+      gc: request.url.slice(1) !== "prosemirror-versions"
+    });
+    console.log(`YJS Setup successful for Request: ${request.url}`);
+  } catch (err) {
+    console.error(`Error setting up YJS: ${err}`);
+  }
+});
+
+// Handle Socket.IO connections
+// io.on('connection', (socket) => {
+//   console.log('Socket.IO client connected');
+//   // Handle Socket.IO events
+// });
+
+// Start server
+httpServer.listen(4000, () => {
+  console.log('Server listening on port 4000');
+});
+
+// wss.on("connection", (conn, req) => {
+//   try {
+//     setupWSConnection(conn, req, {
+//       gc: req.url.slice(1) !== "prosemirror-versions"
+//     });
+//     debug.info(`YJS Setup successful for Request: ${req.url}`);
+//   } catch (err) {
+//     debug.error(`Error setting up YJS: ${err}`);
+//   }
+// });
+
+// videoServer.listen(4000, () => {
+//   console.log("videoServer listening on port: 4000");
+//   debug.info("videoServer listening on port: 4000");
+// });
+
+// collabEditServer.listen(8080, function () {
+//   console.log("collabEditServer listening on port: 8080");
+//   debug.info("collabEditServer listening on port: 8080");
+// });
+
+// httpServer.listen(4000, () => {
+//   console.log("Server listening on port 4000");
+//   debug.info("Server listening on port 4000");
+// });
+
+// // Error handling for the HTTP server
+// httpServer.on('error', (err) => {
+//   console.error('Server error:', err);
+//   debug.error('Server error: ' + err);
+// });
+
+// // WebSocket server error handling
+// wss.on('error', (err) => {
+//   console.error('WebSocket server error:', err);
+//   debug.error('WebSocket server error: ' + err);
+// });
+
+
+
+
+

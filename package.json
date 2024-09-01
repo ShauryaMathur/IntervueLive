@@ -9,7 +9,8 @@
     "mini": " cd public/js && browserify jquery.min.js client.js -o bundle.js",
     "dev": " npm run mini && nodemon ./index",
     "sim": "concurrently \"nodemon ./index\" \"watchify public/js/jquery.min.js public/js/client.js -o public/js/bundle.js -v\"",
-    "start": "node ./index.js "
+    "start": "node ./index.js ",
+    "go": "npm run build && npm run dev"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -40,6 +41,7 @@
     "simple-node-logger": "^18.12.23",
     "simple-peer": "^9.5.0",
     "socket.io": "^2.3.0",
+    "uws": "^10.148.1",
     "websocketserver": "^1.0.0",
     "ws": "^7.1.2",
     "y-monaco": "^0.1.6",

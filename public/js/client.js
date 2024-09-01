@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", event => {
   
   const axios = require("axios");
   const Peer = require("simple-peer");
-  const io = require("socket.io-client");
+  // const io = require("socket.io");
   const socket = io(`${url}`);
   const DetectRTC = require("detectrtc");
   const clipboard = new ClipboardJS(".copy");
@@ -90,6 +90,8 @@ document.addEventListener("DOMContentLoaded", event => {
 
       //Peer constructor
       const init_peer = type => {
+        console.log('Init peer');
+        
         let peer = new Peer({
           initiator: type == "init" ? true : false,
           stream: localStream,
