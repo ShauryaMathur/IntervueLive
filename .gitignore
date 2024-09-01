@@ -1,1 +1,7 @@
 /node_modules/
+/public/dist/
+/logs
+package-lock.json
+/public/dist
+/cache/
+
