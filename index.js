@@ -160,7 +160,7 @@ const wss = new WebSocket.Server({ noServer:true });
 // Handle WebSocket Upgrade Requests
 httpServer.on('upgrade', (request, socket, head) => {
   // Handle WebSocket requests for YJS
-  if (request.url.startsWith('/yjs') || request.url.startsWith('/1')) {
+  if (request.url.startsWith('/yjs') || /^\/\d+/.test(request.url)) {
     wss.handleUpgrade(request, socket, head, (ws) => {
       wss.emit('connection', ws, request);
     });
