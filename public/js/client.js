@@ -235,6 +235,8 @@ document.addEventListener("DOMContentLoaded", event => {
 
       //invite url
       function getUrl() {
+        // console.log('Monaco from CLient',monaco.editor);
+        
         let url = window.location.href
           .replace("interviewer", "candidate")
           .replace(window.location.href.split("/")[4] + "/", "");

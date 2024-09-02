@@ -5,6 +5,7 @@ module.exports = {
   devtool: 'source-map',
   entry: {
     'monaco': './public/js/yjsindex.js',
+    'room':'./public/js/room.js',
     // Package each language's worker and give these filenames in `getWorkerUrl`
     'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
     'json.worker': 'monaco-editor/esm/vs/language/json/json.worker',

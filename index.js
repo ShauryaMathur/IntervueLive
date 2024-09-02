@@ -19,8 +19,6 @@ const debug = require('simple-node-logger').createRollingFileLogger(loggingOptio
 //Editor Config
 const setupWSConnection = require("y-websocket/bin/utils").setupWSConnection;
 
-
-
 // const privateKey = fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/privkey.pem', 'utf8');
 // const certificate = fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/cert.pem', 'utf8');
 // const ca = fs.readFileSync('/etc/letsencrypt/live/interviews.codeground.in/chain.pem', 'utf8');
@@ -188,56 +186,15 @@ wss.on('connection', (ws, request) => {
   }
 });
 
-// Handle Socket.IO connections
-// io.on('connection', (socket) => {
-//   console.log('Socket.IO client connected');
-//   // Handle Socket.IO events
-// });
-
 // Start server
 httpServer.listen(4000, () => {
-  console.log('Server listening on port 4000');
+  console.log("Server listening on port 4000");
+  debug.info("Server listening on port 4000");
 });
 
-// wss.on("connection", (conn, req) => {
-//   try {
-//     setupWSConnection(conn, req, {
-//       gc: req.url.slice(1) !== "prosemirror-versions"
-//     });
-//     debug.info(`YJS Setup successful for Request: ${req.url}`);
-//   } catch (err) {
-//     debug.error(`Error setting up YJS: ${err}`);
-//   }
-// });
-
-// videoServer.listen(4000, () => {
-//   console.log("videoServer listening on port: 4000");
-//   debug.info("videoServer listening on port: 4000");
-// });
-
-// collabEditServer.listen(8080, function () {
-//   console.log("collabEditServer listening on port: 8080");
-//   debug.info("collabEditServer listening on port: 8080");
-// });
-
-// httpServer.listen(4000, () => {
-//   console.log("Server listening on port 4000");
-//   debug.info("Server listening on port 4000");
-// });
-
-// // Error handling for the HTTP server
-// httpServer.on('error', (err) => {
-//   console.error('Server error:', err);
-//   debug.error('Server error: ' + err);
-// });
-
-// // WebSocket server error handling
-// wss.on('error', (err) => {
-//   console.error('WebSocket server error:', err);
-//   debug.error('WebSocket server error: ' + err);
-// });
-
-
-
-
+// Error handling for the HTTP server
+httpServer.on('error', (err) => {
+  console.error('Server error:', err);
+  debug.error('Server error: ' + err);
+});
 

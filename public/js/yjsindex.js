@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { MonacoBinding } from "y-monaco";
@@ -23,35 +21,41 @@ self.MonacoEnvironment = {
   }
 };
 
-window.addEventListener("load", () => {
-  const ydoc = new Y.Doc();
+let editorPromise;
 
-  const provider = new WebsocketProvider(
-    "ws://localhost:4000" ,
-    location.href.indexOf("/interviewer") != -1
-      ? location.href.split("/")[5].toString()
-      : location.href.split("/")[4].toString(),
-    ydoc
-  );
-  const type = ydoc.getText("monaco");
+function initializeEditor() {
+  return new Promise((resolve) => {
+    window.addEventListener("load", () => {
+      const ydoc = new Y.Doc();
+      const provider = new WebsocketProvider(
+        "ws://localhost:4000",
+        location.href.indexOf("/interviewer") !== -1
+          ? location.href.split("/")[5].toString()
+          : location.href.split("/")[4].toString(),
+        ydoc
+      );
+      const type = ydoc.getText("monaco");
+      const editor = monaco.editor.create(
+        document.getElementById("monaco-editor"),
+        {
+          value: "",
+          theme: "vs-dark",
+          automaticLayout: true,
+          language: "java",
+          formatOnType: false,
+          formatOnPaste: false
+        }
+      );
+      const monacoBinding = new MonacoBinding(
+        type,
+        editor.getModel(),
+        new Set([editor]),
+        provider.awareness
+      );
 
-  window.editor = monaco.editor.create(
-    document.getElementById("monaco-editor"),
-    {
-      value: "",
-      theme: "vs-dark",
-      automaticLayout: true,
-      language: "java",
-      formatOnType: false,
-      formatOnPaste: false
-    }
-  );
-  const monacoBinding = new MonacoBinding(
-    type,
-    editor.getModel(),
-    new Set([editor]),
-    provider.awareness
-  );
+      resolve(editor);
+    });
+  });
+}
 
-  window.example = { provider, ydoc, type, monacoBinding };
-});
+export { initializeEditor };
