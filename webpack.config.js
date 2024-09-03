@@ -1,10 +1,11 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   mode: 'development',
   devtool: 'source-map',
   entry: {
     'monaco': './public/js/yjsindex.js',
+    'room':'./public/js/room.js',
     // Package each language's worker and give these filenames in `getWorkerUrl`
     'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
     'json.worker': 'monaco-editor/esm/vs/language/json/json.worker',
@@ -14,14 +15,30 @@ module.exports = {
   },
   output: {
     globalObject: 'self',
-    path: path.resolve(__dirname, 'public','dist'),
+    path: path.resolve(__dirname, 'public', 'dist'),
     filename: '[name].bundle.js',
     publicPath: '/dist/'
   },
   module: {
-    rules: [{
-      test: /\.css$/,
-      use: ['style-loader', 'css-loader']
-    }]
+    rules: [
+      {
+        test: /\.(js|mjs)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.mjs', '.json'],
+    fullySpecified: false,  // This tells Webpack to not require fully specified ESM imports
   }
-}
+};

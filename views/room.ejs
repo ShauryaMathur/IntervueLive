@@ -2,60 +2,73 @@
 <html lang="en">
 
 <head>
-   
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>CG Interview Tool</title>
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://cdnjs.cloudflare.com;"> -->
 
-  
-<!-- Bootstrap core CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-<!-- Material Design Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.5/css/mdb.min.css" rel="stylesheet">
-<!-- JQuery -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-<!-- Google Fonts -->
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
-<!--Custom Css-->
-<link href="/css/chat.css" rel="stylesheet">
- 
-<script>
-  const room = "<%=room_name%>";
-</script>
-  
-<!-- Custom JS-->
-<script src="/dist/monaco.bundle.js" type="text/javascript" defer></script>
-<script src="/js/bundle.js" type="text/javascript"  defer></script>
-     
+  <title>IntervueLive</title>
+
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.5/css/mdb.min.css" rel="stylesheet">
+  <!-- JQuery -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+  <!--Custom Css-->
+  <link href="/css/chat.css" rel="stylesheet">
+
+  <script>
+    const room = "<%=room_name%>";
+  </script>
+
+  <!-- Custom JS-->
+  <!-- <script src="/socket.io/socket.io.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script src="/dist/monaco.bundle.js" type="text/javascript"></script>
+  <script src="/dist/room.bundle.js" type="text/javascript"></script>
+  <script src="/js/bundle.js" type="text/javascript"></script>
 </head>
 
 <body>
 
-<!--Header Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-dark cyan"> <span><a href="#"><img src="/img/logo.png"></a></span><span><a class="navbar-brand" href="#"><img src="/img/logo-light-text.png" ></a></span>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4"
-                      aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-                      <div style="margin-left: 25%;"><h4 style="color: aliceblue;
-                        font-weight: 700;">Live Interview</h4></div>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
-    <ul class="navbar-nav ml-auto">
-      <!-- <li class="nav-item active"> <a class="nav-link" href="#"> <i class="fas fa-cogs"></i> Settings </a> </li> -->
-      <li class="nav-item" style="color:red"> <img src="/img/beta-vertical.png" height="50px"> </li>
-    </ul>
-  </div>
-</nav>
-<!--/.Header Navbar -->
+  <!--Header Navbar -->
+  <nav class="mb-1 navbar navbar-expand-lg navbar-dark cyan"> <span><a href="#"><img src="/img/logo.png" alt="Logo"
+          loading="lazy"></a></span><span><a class="navbar-brand" href="#"><img
+          src="/img/logo-light-text.png"></a></span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
+      aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation"> <span
+        class="navbar-toggler-icon"></span> </button>
+    <div style="margin-left: 25%;">
+      <h4 style="color: aliceblue;
+                        font-weight: 700;">IntervueLive</h4>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+      <ul class="navbar-nav ml-auto">
+        <!-- <li class="nav-item active"> <a class="nav-link" href="#"> <i class="fas fa-cogs"></i> Settings </a> </li> -->
+        <li class="nav-item" style="color:red"> <img src="/img/beta-vertical.png" height="50px"> </li>
+      </ul>
+    </div>
+  </nav>
+  <!--/.Header Navbar -->
 
- <!-- Modal -->
- <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Modal -->
+  <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-body">
@@ -68,7 +81,8 @@
             </button>
           </div>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" id="link" style="padding: 10px;color: black;font-size: initial;margin-top: 6px;"/>
+            <input type="text" class="form-control" id="link"
+              style="padding: 10px;color: black;font-size: initial;margin-top: 6px;" />
             <div class="input-group-append">
               <button type="button" class="btn btn-outline-primary copy" data-clipboard-target="#link">
                 <i class="far fa-copy"></i>
@@ -79,28 +93,28 @@
       </div>
     </div>
   </div>
-<!--./Modal-->
+  <!--./Modal-->
 
-<!-- Terminate Interview Modal -->
-<div class="modal fade hide " id="disconnectModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" style="padding:0.5em;">
-      <div class="modal-body">
-        Are you sure you want to end the Interview?
-      </div>
+  <!-- Terminate Interview Modal -->
+  <div class="modal fade hide " id="disconnectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="padding:0.5em;">
+        <div class="modal-body">
+          Are you sure you want to end the Interview?
+        </div>
         <div class="modal-footer" style="height:50px;">
           <button type="button" data-dismiss="modal" class="btn btn-primary" id="hangupConfirmationButton" style="height: 30px;background-color: #3bbcd4 !important;
           padding: 0.5em;">End Interview</button>
           <button type="button" data-dismiss="modal" class="btn" style="color: black;height: 30px;
           padding: 0.5em;">Continue</button>
         </div>
-        
+
       </div>
     </div>
   </div>
-<!--./Terminate Interview Modal-->
+  <!--./Terminate Interview Modal-->
 
-<div class="container-fluid"> 
+  <div class="container-fluid">
     <!--Section: Main Content-->
     <section>
       <!--Grid row-->
@@ -111,8 +125,8 @@
             <div class="card-body" style="padding:0.5rem !important">
               <div class="row">
                 <div class="col-md-2"><select class="form-control" onchange="changeLanguage()" id="language">
-                    <option value="java">Java</option>
                     <option value="javascript">Javascript</option>
+                    <option value="java">Java</option>
                     <option value="python">Python</option>
                     <option value="mysql">mysql</option>
                     <option value="php">PHP</option>
@@ -138,27 +152,35 @@
   </div>
   <!--Grid row-->
   <div class="video-box1">
-    <video id="host_stream" class="img-fluid" playsinline autoplay muted></video></div>
+    <video id="host_stream" class="img-fluid" playsinline autoplay muted></video>
+  </div>
 
   <div class="video-box2" id="remote-stream-video-box">
     <div class="btn-group btn-group-sm btn-video" role="group">
-      <button id="maximize" class="btn-floating btn-sm btn-cyan btn-rounded" title="Maximise Window"><i id="maximizeIcon"
-          class="fa fa-window-maximize"></i></button>
+      <button id="maximize" class="btn-floating btn-sm btn-cyan btn-rounded" title="Maximise Window"><i
+          id="maximizeIcon" class="fa fa-window-maximize"></i></button>
     </div>
     <p id="waiting">Waiting for someone to join...</p>
+    <!-- <div id="loading" style="display:none;">
+      <i class="fa fa-spinner fa-spin"></i> Loading...
+    </div> -->
     <video id="remote_stream" class="img-fluid" playsinline></video>
   </div>
   <!--Floating Menu-->
   <nav class="floating-menu">
     <ul class="main-menu">
-      <li> <a id="invite" class="ripple" title = "Invite Candidate" data-target="#inviteModal" data-toggle="modal"> <i class="fas fa-envelope fa-sm"></i> </a> </li>
-      <li><a class="ripple" id="fullscreen" title = "FullScreen"><i class="fas fa-expand"></i></a></li>
-      <li> <a id="disablevideo" class="ripple" title = "Disable Video"><i class="fas fa-video fa-sm" id="disableVideoicon"></i> </a> </li>
-      <li> <a id="mute" class="ripple" title = "Disable Audio"> <i class="fas fa-microphone fa-sm" id="muteicon"></i> </a> </li>
+      <li> <a id="invite" class="ripple" title="Invite Candidate" data-target="#inviteModal" data-toggle="modal"> <i
+            class="fas fa-envelope fa-sm"></i> </a> </li>
+      <li><a class="ripple" id="fullscreen" title="FullScreen"><i class="fas fa-expand"></i></a></li>
+      <li> <a id="disablevideo" class="ripple" title="Disable Video"><i class="fas fa-video fa-sm"
+            id="disableVideoicon"></i> </a> </li>
+      <li> <a id="mute" class="ripple" title="Disable Audio"> <i class="fas fa-microphone fa-sm" id="muteicon"></i> </a>
+      </li>
       <!-- <li> <a id="sharescreen" class="ripple"> <i class="fas fa-desktop fa-sm"></i> </a> </li> -->
-      <li> <a id="hangup" title = "Disconnect Call" class="ripple" data-target="#disconnectModal" data-toggle="modal"> <i class="fas fa-phone-slash fa-sm"></i> </a> </li>
-      <li> <a class="ripple" id="compile" title = "Compile and Run" target="_blank" href="https://www.jdoodle.com/online-java-compiler/"> <i
-            class="fas fa-code fa-sm"></i> </a> </li>
+      <li> <a id="hangup" title="Disconnect Call" class="ripple" data-target="#disconnectModal" data-toggle="modal"> <i
+            class="fas fa-phone-slash fa-sm"></i> </a> </li>
+      <li> <a class="ripple" id="compile" title="Compile and Run" target="_blank"
+          href="https://www.jdoodle.com/online-java-compiler/"> <i class="fas fa-code fa-sm"></i> </a> </li>
     </ul>
     <div class="menu-bg"></div>
   </nav>
@@ -168,43 +190,13 @@
 
   <script type="text/javascript">
 
-var favIconUrl = "https://codeground.in/img/fav-logo-icon.png";
-var head = document.getElementsByTagName("head")[0];
-var favLink = document.createElement("link");
-        favLink.setAttribute("rel", "icon");
-        favLink.setAttribute("href", favIconUrl);
-        favLink.setAttribute("type", "image/x-icon");
-        head.appendChild(favLink);
-  
-function openNav() {
-  document.getElementById("actionbar").style.width = "40%";
-  document.getElementById("settings").style.display="none";
-}
-function closeNav() {
-  document.getElementById("actionbar").style.width = "0";
-  document.getElementById("settings").style.display="block";
-}
-document.addEventListener("beforeunload",(e)=>{return null;});
-
-function changeLanguage(){
-  var compilerLinksMap={"java":'https://www.jdoodle.com/online-java-compiler/',
-    "javascript":'https://www.jdoodle.com/execute-nodejs-online/'
-    ,"python":'https://www.jdoodle.com/python3-programming-online/'
-    ,"mysql":'https://www.jdoodle.com/execute-sql-online/'
-    ,"php":'https://www.jdoodle.com/php-online-editor/'
-    ,"r":'https://www.jdoodle.com/execute-r-online/'
-    ,"cpp":'https://www.jdoodle.com/online-compiler-c++17/'
-    ,"csharp":'https://www.jdoodle.com/compile-c-sharp-online/'}
-    var language = document.getElementById('language').value;
-    //console.log(language);
-    monaco.editor.setModelLanguage(window.editor.getModel(), language);
-    document.getElementById("compile").setAttribute("href",compilerLinksMap[language]);
-    //console.log(document.getElementById("compile").href);
-  }
-  function changeTheme(){
-    var theme = document.getElementById('theme').value;
-    monaco.editor.setTheme(theme);
-  }
+    var favIconUrl = "https://codeground.in/img/fav-logo-icon.png";
+    var head = document.getElementsByTagName("head")[0];
+    var favLink = document.createElement("link");
+    favLink.setAttribute("rel", "icon");
+    favLink.setAttribute("href", favIconUrl);
+    favLink.setAttribute("type", "image/x-icon");
+    head.appendChild(favLink);
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
 </body>
