@@ -10690,139 +10690,112 @@ function config (name) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],61:[function(require,module,exports){
-document.addEventListener("DOMContentLoaded", event => {
+document.addEventListener("DOMContentLoaded", (event) => {
   let localStream,
     client = {};
-  let audioenabled = true;
-  let disbalevideoenabled = true;
-  let url = location.protocol + "//" + location.hostname+':4000';
+  let audioEnabled = true;
+  let disableVideoEnabled = true;
+  const url = `${location.protocol}//${location.hostname}:4000`;
   console.log(url);
-  
+
   const axios = require("axios");
   const Peer = require("simple-peer");
-  // const io = require("socket.io");
-  const socket = io(`${url}`);
+  const socket = io(url);
   const DetectRTC = require("detectrtc");
   const clipboard = new ClipboardJS(".copy");
+
   const fullscreen = document.getElementById("fullscreen");
-  //const invite = document.getElementById("invite");
-  const host_stream = document.getElementById("host_stream");
-  const remote_stream = document.getElementById("remote_stream");
+  const hostStream = document.getElementById("host_stream");
+  const remoteStream = document.getElementById("remote_stream");
   const disableVideo = document.getElementById("disablevideo");
-  const compileAndRun = document.getElementById("compile");
   const mute = document.getElementById("mute");
   const hangup = document.getElementById("hangup");
   const invBtn = document.getElementById("invite");
   const link = document.getElementById("link");
   const waiting = document.getElementById("waiting");
-  const muteicon = document.getElementById("muteicon");
-  const disableVideoicon = document.getElementById("disableVideoicon");
+  const muteIcon = document.getElementById("muteicon");
+  const disableVideoIcon = document.getElementById("disableVideoicon");
   const maximize = document.getElementById("maximize");
   const maximizeIcon = document.getElementById("maximizeIcon");
-  // const shareScreen = document.getElementById("sharescreen");
-  const remoteStreamVideoBox = document.getElementById(
-    "remote-stream-video-box"
-  );
-  const hangupConfirmationButton = document.getElementById(
-    "hangupConfirmationButton"
-  );
+  const remoteStreamVideoBox = document.getElementById("remote-stream-video-box");
+  const hangupConfirmationButton = document.getElementById("hangupConfirmationButton");
 
-  videoStreamMaximizeFlag = true;
+  let videoStreamMaximizeFlag = true;
 
-  if (location.href.indexOf("/candidate/") != -1) {
+  if (location.href.includes("/candidate/")) {
     hangup.remove();
     disableVideo.remove();
     mute.remove();
     invBtn.remove();
   }
 
-  /*  document.addEventListener("visibilitychange",function(){
-    if(document.location.href.indexOf('interviewer')===-1){
+  /* 
+  document.addEventListener("visibilitychange", function() {
+    if (document.location.href.includes('interviewer')) {
       confirm("Do NOT switch tabs!");
-
     }
-      
-  }); */
+  });
+  */
 
-  //initialize app with getUserMedia
-  navigator.getMedia =
-    navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia;
-
-  if (DetectRTC.isWebRTCSupported === false) {
+  if (!DetectRTC.isWebRTCSupported) {
     alert("Device not supported!");
   }
   if (DetectRTC.osName === "iOS" && DetectRTC.browser === "Chrome") {
     alert("Browser not supported! Please use Safari");
   }
+
   console.log('DOM2');
-  
+
   navigator.mediaDevices
-    .getUserMedia({
-      video: true,
-      audio: true
-    })
-    .then(stream => {
+    .getUserMedia({ video: true, audio: true })
+    .then((stream) => {
       console.log('New client');
-      
+
       socket.emit("new_client", room);
       localStream = stream;
-      host_stream.setAttribute("autoplay", "");
-      host_stream.setAttribute("muted", "");
-      host_stream.setAttribute("playsinline", "");
+      hostStream.setAttribute("autoplay", "");
+      hostStream.setAttribute("muted", "");
+      hostStream.setAttribute("playsinline", "");
 
-      if ("srcObject" in host_stream) {
-        host_stream.srcObject = stream;
-      } else {
-        // old browsers
-        host_stream.src = URL.createObjectURL(stream);
-      }
+      hostStream.srcObject = stream;
 
-      //Peer constructor
-      const init_peer = type => {
+      const initPeer = (type) => {
         console.log('Init peer');
-        
+
         let peer = new Peer({
-          initiator: type == "init" ? true : false,
+          initiator: type === "init",
           stream: localStream,
           trickle: false,
           config: {
             iceServers: [
               {
-                urls: "stun:global.stun.twilio.com:3478" // Correct STUN server URL
+                urls: "stun:global.stun.twilio.com:3478"
               },
               {
-                urls: "turn:your.turn.server:3478", // Replace with your TURN server details
-                username: "yourUsername", // Replace with your TURN server username
-                credential: "yourPassword" // Replace with your TURN server password
+                urls: "turn:your.turn.server:3478",
+                username: "yourUsername",
+                credential: "yourPassword"
               }
             ]
           }
         });
-        peer.on("stream", stream => {
-          waiting.setAttribute("hidden", "");
-          remote_stream.setAttribute("autoplay", "");
-          remote_stream.setAttribute("muted", "");
-          remote_stream.setAttribute("playsinline", "");
 
-          if ("srcObject" in remote_stream) {
-            remote_stream.srcObject = stream;
-          } else {
-            // old browsers
-            remote_stream.src = URL.createObjectURL(stream);
-          }
+        peer.on("stream", (stream) => {
+          waiting.hidden = true;
+          remoteStream.setAttribute("autoplay", "");
+          remoteStream.setAttribute("muted", "");
+          remoteStream.setAttribute("playsinline", "");
+
+          remoteStream.srcObject = stream;
         });
 
         return peer;
       };
 
-      //Create host
-      const make_peer = () => {
+      const makePeer = () => {
         client.gotAnswer = false;
-        let peer = init_peer("init");
-        peer.on("signal", data => {
+        let peer = initPeer("init");
+        peer.on("signal", (data) => {
           if (!client.gotAnswer) {
             socket.emit("offer", room, data);
           }
@@ -10830,159 +10803,130 @@ document.addEventListener("DOMContentLoaded", event => {
         client.peer = peer;
       };
 
-      //Create remote peer
-      const make_remote_peer = offer => {
-        let peer = init_peer("notinit");
-        peer.on("signal", data => {
+      const makeRemotePeer = (offer) => {
+        let peer = initPeer("notinit");
+        peer.on("signal", (data) => {
           socket.emit("answer", room, data);
         });
         peer.signal(offer);
         client.peer = peer;
       };
 
-      //session active message
-      const session_active = () => {
+      const sessionActive = () => {
         document.write("Session Active. Please try again later!");
       };
 
-      //handle answer
-      const signal_answer = answer => {
+      const signalAnswer = (answer) => {
         client.gotAnswer = true;
-        let peer = client.peer;
-        peer.signal(answer);
+        client.peer.signal(answer);
       };
 
-      //handle destroy peer
-      const remove_peer = () => {
-        remote_stream.remove();
+      const removePeer = () => {
+        remoteStream.remove();
         window.location.href = "/";
         if (client.peer) {
           client.peer.destroy();
         }
       };
 
-      //hangup
       hangupConfirmationButton.addEventListener("click", () => {
         socket.emit("user_disconnected", room);
         axios
-          .get("/disconnect/" + room)
-          .then(function(res) {})
-          .catch(function(err) {
+          .get(`/disconnect/${room}`)
+          .then((res) => {})
+          .catch((err) => {
             console.log(err);
           });
-        remove_peer();
+        removePeer();
       });
 
-      //mute audio
       mute.addEventListener("click", () => {
-        let audioTracks = localStream.getAudioTracks();
-        for (var i = 0; i < audioTracks.length; ++i) {
-          audioTracks[i].enabled = !audioTracks[i].enabled;
-          if (audioenabled) {
-            muteicon.className = "fas fa-microphone-slash fa-sm";
+        localStream.getAudioTracks().forEach((track) => {
+          track.enabled = !track.enabled;
+          if (audioEnabled) {
+            muteIcon.className = "fas fa-microphone-slash fa-sm";
             mute.title = "Enable Audio";
           } else {
-            muteicon.className = "fas fa-microphone fa-sm";
+            muteIcon.className = "fas fa-microphone fa-sm";
             mute.title = "Disable Audio";
           }
-          audioenabled = !audioenabled;
-        }
+          audioEnabled = !audioEnabled;
+        });
       });
 
-      //goto FullScreen
       fullscreen.addEventListener("click", () =>
         document.documentElement.requestFullscreen()
       );
 
-      //disable video
       disableVideo.addEventListener("click", () => {
-        videoTracks = localStream.getVideoTracks();
-        for (var i = 0; i < videoTracks.length; ++i) {
-          videoTracks[i].enabled = !videoTracks[i].enabled;
-          if (disbalevideoenabled) {
-            disableVideoicon.className = "fas fa-video-slash fa-sm";
+        localStream.getVideoTracks().forEach((track) => {
+          track.enabled = !track.enabled;
+          if (disableVideoEnabled) {
+            disableVideoIcon.className = "fas fa-video-slash fa-sm";
             disableVideo.title = "Enable Video";
           } else {
-            disableVideoicon.className = "fas fa-video fa-sm";
+            disableVideoIcon.className = "fas fa-video fa-sm";
             disableVideo.title = "Disable Video";
           }
-          disbalevideoenabled = !disbalevideoenabled;
-        }
+          disableVideoEnabled = !disableVideoEnabled;
+        });
       });
 
-      //maximise stream window
       maximize.addEventListener("click", () => {
         if (videoStreamMaximizeFlag) {
           remoteStreamVideoBox.className = "video-box2 maximized-stream";
           maximizeIcon.className = "fa fa-window-minimize";
-          maximize.title = "Minimise Window";
-          videoStreamMaximizeFlag = false;
+          maximize.title = "Minimize Window";
         } else {
           remoteStreamVideoBox.classList.remove("maximized-stream");
           maximizeIcon.className = "fa fa-window-maximize";
-          maximize.title = "Maximise Window";
-          videoStreamMaximizeFlag = true;
+          maximize.title = "Maximize Window";
         }
+        videoStreamMaximizeFlag = !videoStreamMaximizeFlag;
       });
 
-      //invite url
       function getUrl() {
-        // console.log('Monaco from CLient',monaco.editor);
-        
         let url = window.location.href
           .replace("interviewer", "candidate")
           .replace(window.location.href.split("/")[4] + "/", "");
         link.value = url;
       }
 
-      invBtn.addEventListener("click", getUrl());
+      invBtn.addEventListener("click", getUrl);
 
-      addMedia = stream => {
-        host_stream.setAttribute("autoplay", "");
-        host_stream.setAttribute("muted", "");
-        host_stream.setAttribute("playsinline", "");
+      const addMedia = (stream) => {
+        hostStream.setAttribute("autoplay", "");
+        hostStream.setAttribute("muted", "");
+        hostStream.setAttribute("playsinline", "");
 
-        if ("srcObject" in host_stream) {
-          host_stream.srcObject = stream;
-        } else {
-          // old browsers
-          host_stream.src = URL.createObjectURL(stream);
-        }
+        hostStream.srcObject = stream;
       };
 
       // shareScreen.addEventListener("click", () => {
-
       //   client.peer.removeStream(localStream);
 
       //   navigator.mediaDevices
       //     .getDisplayMedia({ audio: true, video: true })
       //     .then(stream => {
       //       localStream = stream;
-
       //       client.peer.addStream(stream);
 
-      //       //client.peer.on('stream',stream=>{});
       //       var videoTracks = stream.getVideoTracks();
       //       for(let i=0;i<videoTracks.length;i++)
       //         client.peer.addTrack(videoTracks[i],stream);
 
-      //       // client.peer.signal();
-      //       // addMedia(stream);
       //     })
-      //     .catch(err => //console.log(err));
+      //     .catch(err => console.log(err));
       // });
 
-      //events
-      socket.on("sent_offer", make_remote_peer);
-      socket.on("sent_answer", signal_answer);
-      socket.on("session_active", session_active);
-      socket.on("create_peer", make_peer);
-      socket.on("remove_peer", remove_peer);
+      socket.on("sent_offer", makeRemotePeer);
+      socket.on("sent_answer", signalAnswer);
+      socket.on("session_active", sessionActive);
+      socket.on("create_peer", makePeer);
+      socket.on("remove_peer", removePeer);
     })
-    .catch(err => {
-      alert(
-        "Cannot get access to your media device! Check logs for more info."
-      );
+    .catch((err) => {
+      alert("Cannot get access to your media device! Check logs for more info.");
       console.log(err);
     });
 });

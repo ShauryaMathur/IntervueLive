@@ -8,6 +8,8 @@ const https = require("https")
 const path = require('path');
 const { log } = require("console");
 
+const PORT = 4000;
+
 //Logging
 const loggingOptions = {
   logDirectory: path.join(__dirname, '/logs'),
@@ -36,9 +38,6 @@ const io = require("socket.io")(httpServer, {
   transports: ['websocket','polling'] // Ensure WebSocket transport is used
 });
 
-// const videoServer = require("http").Server(app);
-// const collabEditServer = require("http").Server(app);
-
 //Middleware
 app.use(cors({ origin: "https://live2.codegrounds.co.in", credentials: true }));
 app.set("views", "./views");
@@ -49,18 +48,6 @@ app.use(express.urlencoded({ extended: true }));
 
 //Room Config
 const rooms = {};
-
-//@route -> createroom[post]
-// app.get("/createroom/:roomname", (req, res) => {
-//   if (rooms[req.params.roomname] != null) {
-//     return res.render("roomalreadyexists");
-//   }
-
-//   rooms[req.params.roomname] = { users: {} };
-
-//   res.status(200);
-//   io.emit("room_created", req.params.roomname);
-// });
 
 // Routes
 
@@ -110,6 +97,18 @@ app.get("/disconnect/:room", (req, res) => {
   debug.info(`Interview with token : ${req.params.room} disconnected`);
 });
 
+//@route -> createroom[post]
+// app.get("/createroom/:roomname", (req, res) => {
+//   if (rooms[req.params.roomname] != null) {
+//     return res.render("roomalreadyexists");
+//   }
+
+//   rooms[req.params.roomname] = { users: {} };
+
+//   res.status(200);
+//   io.emit("room_created", req.params.roomname);
+// });
+
 app.get("*", (req, res) => {
   debug.info("Default Route");
   res.render("index", { rooms: rooms });
@@ -119,7 +118,6 @@ app.get("*", (req, res) => {
 
 io.on("connection", socket => {
   socket.on("new_client", room => {
-    console.log('COnnected3')
     io.in(room).clients(function (error, clients) {
       if (error) {
         debug.error(`Error while creating new client in new room ${room} ` + error);
@@ -187,9 +185,9 @@ wss.on('connection', (ws, request) => {
 });
 
 // Start server
-httpServer.listen(4000, () => {
-  console.log("Server listening on port 4000");
-  debug.info("Server listening on port 4000");
+httpServer.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+  debug.info(`Server listening on port ${PORT}`);
 });
 
 // Error handling for the HTTP server
